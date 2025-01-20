@@ -10,10 +10,11 @@ let player (name, x, y, txt, width, height) =
   e#tag#set Player;
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
-  (* Rajouter velocity question 7.5 *)
+  e#velocity#set Vector.zero;
+  
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
-  (* Question 7.5 enregistrer auprès du Move_system *)
+  Move_system.(register (e :> t));
   e
 
 let players () =  
@@ -31,10 +32,9 @@ let player2 () =
 
 let stop_players () = 
   let Global.{player1; player2; _ } = Global.get () in
-  () (* À remplacer en question 7.5, mettre la vitesse
-        à 0 *)
+  player1#velocity#set Vector.zero;
+  player2#velocity#set Vector.zero
 
 let move_player player v =
-  () (* À remplacer en question 7.5, mettre la vitesse
-        du joueur à v *)
+  player#velocity#set v;
   

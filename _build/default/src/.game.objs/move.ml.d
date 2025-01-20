@@ -1,1 +1,1 @@
-src/systems/move.ml: Component_defs Ecs
+src/systems/move.ml: Component_defs Ecs Seq Vector

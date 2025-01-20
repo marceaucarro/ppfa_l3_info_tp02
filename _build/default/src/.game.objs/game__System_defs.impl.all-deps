@@ -3,6 +3,7 @@ Component_defs
 Draw
 Game__
 Global
+Move
 Rect
 Texture
 Vector

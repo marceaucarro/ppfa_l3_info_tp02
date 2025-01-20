@@ -8,12 +8,11 @@ let ball ctx font =
   e#texture#set Cst.ball_color;
   e#position#set Vector.{x = float Cst.ball_left_x; y = y_orig};
   e#box#set Rect.{width = Cst.ball_size; height = Cst.ball_size};
-  
-  (* Question 7.6 rajouter velocity *)
+  e#velocity#set Vector.zero;
 
   Draw_system.(register (e :>t));
   Collision_system.(register (e :> t));
-  (* Question 7.6 enregistrer auprès du Move_system *)
+  Move_system.(register (e :> t));
   e
 
 let random_v b =
@@ -27,7 +26,5 @@ let restart () =
   if global.waiting <> 0 then begin
     let v = random_v (global.waiting = 1) in
     global.waiting <- 0;
-    () (* à remplacer question 7.6
-          la vitesse de global.ball à v   
-    *)
+    global.ball#velocity#set v;
   end
