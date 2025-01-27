@@ -20,7 +20,7 @@ let ball ctx font =
           e#position#set Vector.{x = float_of_int (Cst.paddle1_x + Cst.paddle_width + Cst.ball_size);
           y = (float_of_int Cst.window_height)/.2.}
         else
-          e#position#set Vector.{x = float_of_int (Cst.paddle2_x + Cst.ball_size);
+          e#position#set Vector.{x = float_of_int (Cst.paddle2_x - Cst.paddle_width - Cst.ball_size);
           y = (float_of_int Cst.window_height)/.2.};
         let global = Global.get () in
         global.waiting <- i
