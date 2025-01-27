@@ -11,6 +11,18 @@ let player (name, x, y, txt, width, height) =
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
   e#velocity#set Vector.zero;
+  e#resolve#set (fun _ t ->
+    match t#tag#get with
+      Wall.HWall (w) ->
+        let v = w#position#get in
+        let () =
+          (if v.y = 0. then
+            e#position#set Vector.{x = e#position#get.x; y = float_of_int Cst.hwall_height}
+          else
+            e#position#set Vector.{x = e#position#get.x; y = w#position#get.y -. float_of_int Cst.paddle_height}) in
+        e#velocity#set Vector.zero
+    | _ -> ()
+  );
   
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));

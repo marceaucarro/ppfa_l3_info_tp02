@@ -5,7 +5,9 @@ Draw
 Game__
 Global
 Move
+Player
 Rect
 System_defs
 Texture
 Vector
+Wall
