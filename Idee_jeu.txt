@@ -1,0 +1,33 @@
+Jeu d'infiltration platformer:
+
+Joueur :
+    vit déplacement sup à un ennemi calme et inf à un ennemi alerté
+    peut se dissimuler grâce à des cachettes
+    possède des coeurs
+    peut éliminer un ennemi de derrière
+
+Ennemis : Mode calme et alerté
+    calme ->
+        Ronde pré-déterminée
+        Entre le mode alerté si le joueur entre son champ de vision
+    alerté ->
+        vitesse de déplacement up
+        suit le joueur jusqu'a une certaine distance
+        fait de gros dégats s'il le touche (2 hit KO ?)
+        si joueur trop loin, reprend sa place et repasse en mode calme
+
+Camera : un ennemi immobile
+    possède un champ de vision
+    si le joueur entre, il alerte les ennemis pendant un certain temps (1 min ?)
+    ou il peut en faire apparaître
+    Version armée qui peut tirer à vue ? (Avec cooldown pour que le joueur fuit)
+
+Checkpoints?
+
+Cachette :
+    le joueur peut s'y cacher momentanément
+    (si le joueur reste caché trop longtemps, pénalité?
+    ex: si il est dans une armoire, la porte peut tomber, ce qui la rend indisponible)
+    -> Impossible de se cacher si dans le champ de vision d'un ennemi
+
+Zones non-éclairées fonctionnant comme des cachettes, mais on peut rester mobile ?
