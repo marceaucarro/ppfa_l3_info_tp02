@@ -1,0 +1,115 @@
+------------------------------------------------------
+	Quentin WATTELLE - Marceau CARRO
+L3 Informatique - Projet Programmation Fonctionnelle Avancée
+------------------------------------------------------
+
+
+		JOURNAL DE BORD
+
+
+------------------------------------------------------
+
+	     Lundi 27 Janvier 2025
+
+------------------------------------------------------
+
+Idées :
+- Notez les idées
+- Jeu type Flappy Bird
+- Jeu Infini/Fini ?
+- Jeu à la Hitman Go *1
+- Jeu inspiré d'un univer ?
+- Jeu d'infiltration vu plateformer *2
+- Jeu en 2.5D
+- Jeu labyrinthe avec des puzzles
+- Jeu avec un moteur graphique
+- 
+
+On a choisit l'idée d'un jeu d'infiltration vu plateformer !
+
+Le but du jeu : Arrivé à la fin du niveau.
+
+Des objectifs secondaires : ex récupérer des items, éliminé un nombre d'ennemis, 
+
+passage secret/échelle
+
+objets utilisables avec différents effets
+
+sorte de mini-évènements
+
+boss en mode batman épouvantail arkam asylum
+
+jeu linéaire mais peu aussi être horizontal
+
+
+
+Entité :
+	- le joueur :
+		se cacher
+		combattre
+		utilisé des coups fatals
+		sauter
+		utiliser des objets
+		intéragir avec des obstacles
+		inventaire
+		regarder en haut en bas à gauche à droite
+		roulade
+		courir
+		marcher
+		double saut ?
+		mourir
+		déguisement ?
+		bouge la caméra/ la vue sur le niveau
+		porter des objets ?
+		ramasser des objets
+	- les ennemis :
+		marcher
+		courir
+		avertir
+		combattre
+		faire une ronde
+		vision
+		mourir
+		fuir
+		différents types d'ennemis ?
+	- les pnj :
+		interaction discution
+		vendeur
+		fabricant
+		
+	- des obstacles :
+		murs
+		sols
+		porte
+		certains avec intéractions ?
+	- des objets :
+		grapin
+		vision nocturne
+		boost de vitesse
+		armes ?
+		carte/ bout de carte
+		clé
+		gain de points de vie
+		objets avec des malus
+	- des informations :
+		menu
+		option
+		musique ?
+		score
+		avancé dans le niveau
+		carte
+		inventaire
+		echap
+		notification/effet sur l'écran
+		le temps avec la fin du niveau/ temps limité ?
+
+
+
+Mélange des idées :
+- Le joueur :
+
+
+Objectif pour la semaine prochaine :
+	- Réfléchir ECS niveau 1
+	- Regarder le nécessaire pour bien utiliser git
+	- (Optionnelle) Essayer de reregarder les tp projet.
