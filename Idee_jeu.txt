@@ -31,3 +31,5 @@ Cachette :
     -> Impossible de se cacher si dans le champ de vision d'un ennemi
 
 Zones non-éclairées fonctionnant comme des cachettes, mais on peut rester mobile ?
+
+A FAIRE: Nettoyer anciens trucs inutiles et classe énnemis et murs avec lesquels il n'y a pas de colision (on passe devant ou derrière)
