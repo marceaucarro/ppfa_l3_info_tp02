@@ -1,1 +1,1 @@
-src/core/input.ml: Ball Cst Gfx Global Hashtbl Player
+src/core/input.ml: Cst Gfx Global Hashtbl Player
