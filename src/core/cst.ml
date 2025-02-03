@@ -9,30 +9,11 @@ V                               V
 HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 *)
 
-
+(**************************************Window*********************************)
 let window_width = 800
 let window_height = 600
 
-let paddle_width = 24
-let paddle_height = 128
-
-let paddle1_x = 64 + paddle_width / 2
-let paddle1_y = window_height / 2 - paddle_height / 2
-
-let paddle2_x = window_width - paddle1_x - paddle_width
-let paddle2_y = paddle1_y
-let paddle_color = Texture.blue
-
-let paddle_v_up = Vector.{ x = 0.0; y = -5.0 }
-let paddle_v_down = Vector.sub Vector.zero paddle_v_up
-
-let ball_size = 24
-let ball_color = Texture.red
-
-let ball_v_offset = window_height / 2 - ball_size / 2
-let ball_left_x = 128 + ball_size / 2
-let ball_right_x = window_width - ball_left_x - ball_size
-
+(**************************************Walls**********************************)
 let wall_thickness = 32
 
 let hwall_width = window_width
@@ -51,5 +32,22 @@ let vwall2_x = window_width - wall_thickness
 let vwall2_y = vwall1_y
 let vwall_color = Texture.yellow
 
+(**************************************Entities*******************************)
+let player_width = 60
+let player_height = 100
+
+let player1_x = window_width/4 + wall_thickness
+let player1_y = window_height - wall_thickness - player_height
+
+let player2_x = window_width - player1_x - player_width
+let player2_y = player1_y
+let player_color = Texture.blue
+
+let player_v_up = Vector.{ x = 0.0; y = -5.0 }
+let player_v_down = Vector.sub Vector.zero player_v_up
+let player_v_left = Vector.{ x = -5.0; y = 0.0 }
+let player_v_right = Vector.sub Vector.zero player_v_left
+
+(**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"
 let font_color = Gfx.color 0 0 0 255
