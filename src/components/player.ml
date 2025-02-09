@@ -19,7 +19,7 @@ let player (name, x, y, txt, width, height) =
           (if v.y = 0. then
             e#position#set Vector.{x = e#position#get.x; y = float_of_int Cst.hwall_height}
           else
-            e#position#set Vector.{x = e#position#get.x; y = w#position#get.y -. float_of_int Cst.paddle_height}) in
+            e#position#set Vector.{x = e#position#get.x; y = w#position#get.y -. float_of_int Cst.player_height}) in
         e#velocity#set Vector.zero
     | _ -> ()
   );
@@ -30,8 +30,8 @@ let player (name, x, y, txt, width, height) =
   e
 
 let players () =  
-  player  Cst.("player1", paddle1_x, paddle1_y, paddle_color, paddle_width, paddle_height),
-  player  Cst.("player2", paddle2_x, paddle2_y, paddle_color, paddle_width, paddle_height)
+  player  Cst.("player1", player1_x, player1_y, player_color, player_width, player_height),
+  player  Cst.("player2", player2_x, player2_y, player_color, player_width, player_height)
 
 
 let player1 () = 
