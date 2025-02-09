@@ -82,17 +82,6 @@ class player name =
     inherit resolver ()
   end
 
-class ball () =
-  object
-    inherit Entity.t ()
-    inherit position ()
-    inherit velocity ()
-    inherit box ()
-    inherit tagged ()
-    inherit texture ()
-    inherit resolver ()
-  end
-
 class wall () =
   object
     inherit Entity.t ()
