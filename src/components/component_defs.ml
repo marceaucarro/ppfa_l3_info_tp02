@@ -1,4 +1,12 @@
 open Ecs
+
+(*Garde en mémoire les coordonnées de l'endroit où est apparu l'entité (utiles pour les ennemis)*)
+class spawnpos () =
+  let r = Component.init Vector.zero in
+  object
+    method spawnpos = r
+  end
+
 class position () =
   let r = Component.init Vector.zero in
   object
@@ -97,6 +105,7 @@ class wall () =
 class enemy =
   object
     inherit Entity.t ()
+    inherit spawnpos ()
     inherit position ()
     inherit velocity ()
     inherit box ()

@@ -5,6 +5,7 @@ type t = {
   ctx : Gfx.context;
   player1 : player;
   player2 : player;
+  enemies : enemy list;
   mutable waiting : int;
 }
 

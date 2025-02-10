@@ -8,6 +8,7 @@ let mult k a = { x = k*. a.x; y = k*. a.y }
 let dot a b = a.x *. b.x +. a.y *. b.y
 let norm a = sqrt((a.x *. a.x) +. (a.y *. a.y))
 let normalize a = mult (1.0 /. (norm a)) a 
+let dist a b = sqrt(a.x -. b.x)*.(a.x -. b.x) +. (a.y -. b.y)*.(a.y -. b.y)
 let pp fmt a = Format.fprintf fmt "(%f, %f)" a.x a.y
 
 let zero = { x = 0.0; y = 0.0 }

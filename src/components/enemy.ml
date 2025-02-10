@@ -10,9 +10,10 @@ let enemy (x, y, txt, width, height) =
   let e = new enemy in
   e#texture#set txt;
   e#tag#set Enemy;
+  e#spawnpos#set Vector.{x = float x; y = float y};
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
-  e#velocity#set Vector.zero;
+  e#velocity#set Cst.enemy_v_right;
   e#resolve#set (fun _ t ->
     match t#tag#get with
       Wall.HWall (w) ->
@@ -39,13 +40,5 @@ let enemy (x, y, txt, width, height) =
   let enemies () = 
     List.map enemy
       Cst.[ 
-        (player1_x + 50, player1_y, hwall_color, player_width, player_height);
+        (player1_x + 50, player1_y, enemy_color, player_width, player_height);
       ]
-let stop_players () = 
-  let Global.{player1; player2; _ } = Global.get () in
-  player1#velocity#set Vector.zero;
-  player2#velocity#set Vector.zero
-
-let move_enemy enemy v =
-  enemy#velocity#set v;
-  

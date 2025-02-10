@@ -19,6 +19,7 @@ let run () =
   let ctx = Gfx.get_context window in
   let _walls = Wall.walls () in
   let player1, player2 = Player.players () in
-  let global = Global.{ window; ctx; player1; player2; waiting = 1; } in
+  let enemies = Enemy.enemies () in
+  let global = Global.{ window; ctx; player1; player2; enemies; waiting = 1; } in
   Global.set global;
   Gfx.main_loop update (fun () -> ())

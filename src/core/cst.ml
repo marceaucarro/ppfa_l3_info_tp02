@@ -49,6 +49,10 @@ let player_v_down = Vector.sub Vector.zero player_v_up
 let player_v_left = Vector.{ x = -5.0; y = 0.0 }
 let player_v_right = Vector.sub Vector.zero player_v_left
 
+let enemy_color = Texture.red
+let enemy_v_left = Vector.mult 0.5 player_v_left
+let enemy_v_right = Vector.mult 0.5 player_v_right
+
 (**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"
 let font_color = Gfx.color 0 0 0 255

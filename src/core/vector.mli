@@ -19,6 +19,9 @@ val norm : t -> float
 val normalize : t -> t
 (** Normlized vector *)
 
+val dist : t -> t -> float
+(** Distance between two vectors *)
+
 val pp : Format.formatter -> t -> unit
 (** Pretty printer for a vector *)
 
