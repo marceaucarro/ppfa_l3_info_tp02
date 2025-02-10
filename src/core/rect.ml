@@ -63,3 +63,14 @@ let rebound v1 r1 v2 r2 =
     Some (if is_zero n.x then Vector.{ x = 1.0; y = -1.0 } else
             Vector.{x = -1.0; y = 1.0 })
   else None
+
+(* Returns None if the two boxes don't intersect and Some v
+   if they do, where v is the position to replace the object represented by v1 and r1,
+    assuming one of the object is fixed.
+*)
+let replace v1 r1 v2 r2 =
+  let s_pos, s_rect = mdiff v1 r1 v2 r2 in
+  if has_origin s_pos s_rect then
+    let n = penetration_vector s_pos s_rect in
+    Some (Vector.{ x = v1.x +. n.x; y = v1.y +. n.y })
+  else None

@@ -23,6 +23,7 @@ class texture () =
     method texture = r
   end
 
+(*The tag allows us to get the type of the object (useful for collisions for example)*)
 type tag = ..
 type tag += No_tag
 
@@ -86,6 +87,18 @@ class wall () =
   object
     inherit Entity.t ()
     inherit position ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit resolver ()
+  end
+
+(*Ennemis : Controlés par l'ordinateur et hostiles au joueur.*)
+class enemy =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit velocity ()
     inherit box ()
     inherit tagged ()
     inherit texture ()
