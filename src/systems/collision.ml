@@ -24,6 +24,20 @@ let update _ el =
       match Rect.rebound pos1 box1 pos2 box2 with
         None -> ()
       | Some v ->
-        e1#resolve#get v (e2 :> tagged);
-        e2#resolve#get v (e1 :> tagged)
+        if (Float.is_finite e1#mass#get || Float.is_finite e1#mass#get) then
+          
+          let v1n = Vector.norm e1#velocity#get in
+          let v2n = Vector.norm e2#velocity#get in
+          let n1, n2 =
+            if v1n != 0.0 || v2n != 0.0 then
+              begin
+                if not (Float.is_finite e1#mass#get) then 0.0, 1.0
+                else if not (Float.is_finite e1#mass#get) then 1.0, 0.0
+                else v1n /. (v1n +. v2n), (v2n /. (v1n +. v2n))
+              end
+            else
+              
+          in
+          e1#resolve#get v (e2 :> tagged);
+          e2#resolve#get v (e1 :> tagged)
     )

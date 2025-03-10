@@ -1,15 +1,16 @@
 open Component_defs
 open System_defs
 
-type tag += HWall of wall| VWall of int * wall
+(*type tag += Wall*)
 
 let wall (x, y, txt, width, height, horiz) =
   let e = new wall () in
   e#texture#set txt;
   e#position#set Vector.{x = float x; y = float y};
-  e#tag#set (if horiz then
-               HWall e else VWall((if x < 100 then 1 else 2), e));
+  e#velocity#set Vector.zero;
+  e#tag#set Wall;
   e#box#set Rect.{width; height};
+  e#mass#set infinity;
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
   e

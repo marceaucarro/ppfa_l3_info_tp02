@@ -11,6 +11,18 @@ class velocity () =
     method velocity = r
   end
 
+  class mass () =
+  let r = Component.init 0.0 in
+  object
+    method mass = r
+  end
+
+class forces () =
+  let r = Component.init Vector.zero in
+  object
+    method forces = r
+  end
+
 class box () =
   let r = Component.init Rect.{width = 0; height = 0} in
   object
@@ -25,6 +37,7 @@ class texture () =
 
 type tag = ..
 type tag += No_tag
+type tag += Wall
 
 class tagged () =
   let r = Component.init No_tag in
@@ -48,8 +61,11 @@ class type collidable =
     inherit Entity.t
     inherit position
     inherit box
-    inherit tagged
+    inherit mass
+    inherit velocity
     inherit resolver
+    inherit tagged
+    inherit forces
   end
 
 class type drawable =
@@ -67,6 +83,14 @@ class type movable =
     inherit velocity
   end
 
+class type physics =
+  object 
+    inherit Entity.t
+    inherit mass
+    inherit forces
+    inherit velocity
+  end
+
 (** Entités :
     Ici, dans inherit, on appelle les constructeurs pour qu'ils initialisent
     leur partie de l'objet, d'où la présence de l'argument ()
@@ -79,6 +103,8 @@ class player name =
     inherit box ()
     inherit tagged ()
     inherit texture ()
+    inherit mass ()
+    inherit forces ()
     inherit resolver ()
   end
 
@@ -86,8 +112,24 @@ class wall () =
   object
     inherit Entity.t ()
     inherit position ()
+    inherit velocity ()
     inherit box ()
     inherit tagged ()
     inherit texture ()
+    inherit mass ()
+    inherit forces ()
     inherit resolver ()
+  end
+
+class block () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit box ()
+    inherit resolver ()
+    inherit tagged ()
+    inherit texture ()
+    inherit mass ()
+    inherit forces ()
+    inherit velocity ()
   end
