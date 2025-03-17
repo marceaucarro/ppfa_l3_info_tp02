@@ -17,10 +17,10 @@ class velocity () =
     method mass = r
   end
 
-class forces () =
+class sum_forces () =
   let r = Component.init Vector.zero in
   object
-    method forces = r
+    method sum_forces = r
   end
 
 class box () =
@@ -65,7 +65,6 @@ class type collidable =
     inherit velocity
     inherit resolver
     inherit tagged
-    inherit forces
   end
 
 class type drawable =
@@ -87,7 +86,7 @@ class type physics =
   object 
     inherit Entity.t
     inherit mass
-    inherit forces
+    inherit sum_forces
     inherit velocity
   end
 
@@ -104,7 +103,7 @@ class player name =
     inherit tagged ()
     inherit texture ()
     inherit mass ()
-    inherit forces ()
+    inherit sum_forces ()
     inherit resolver ()
   end
 
@@ -117,7 +116,7 @@ class wall () =
     inherit tagged ()
     inherit texture ()
     inherit mass ()
-    inherit forces ()
+    inherit sum_forces ()
     inherit resolver ()
   end
 
@@ -130,6 +129,6 @@ class block () =
     inherit tagged ()
     inherit texture ()
     inherit mass ()
-    inherit forces ()
+    inherit sum_forces ()
     inherit velocity ()
   end

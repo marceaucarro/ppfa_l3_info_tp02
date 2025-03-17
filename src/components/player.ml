@@ -15,6 +15,7 @@ let player (name, x, y, txt, width, height, mass) =
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
   Move_system.(register (e :> t));
+  Force_system.(register (e :> t));
   e
 
 let players () =  
