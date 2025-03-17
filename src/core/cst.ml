@@ -36,6 +36,8 @@ let vwall_color = Texture.yellow
 let player_width = 60
 let player_height = 100
 
+let player_mass = 20.
+
 let player1_x = window_width/4 + wall_thickness
 let player1_y = window_height - wall_thickness - player_height
 
