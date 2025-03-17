@@ -18,6 +18,7 @@ let update _dt el =
       let pos = e#position#get in
       let box = e#box#get in
       let txt = e#texture#get in
+      Format.eprintf "%a\n%!" Vector.pp pos;
       Texture.draw ctx surface pos box txt
     ) el;
   Gfx.commit ctx

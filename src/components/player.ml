@@ -12,13 +12,6 @@ let player (name, x, y, txt, width, height, mass) =
   e#box#set Rect.{width; height};
   e#velocity#set Vector.zero;
   e#mass#set mass;
-  e#resolve#set (fun v t ->
-    let pos = Vector.{x = e#position#get.x; y = e#position#get.y} in
-    let vel = Vector.{x = e#velocity#get.x; y = e#velocity#get.y} in
-    e#position#set (Vector.add pos v);
-    e#velocity#set (Vector.mult 0.1 vel)
-  );
-  
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
   Move_system.(register (e :> t));

@@ -26,10 +26,11 @@ let get_resource_opt r =
   if r.is_ready () then Some (r.get()) else None
 let events = Queue.create ()
 let get_context w = w##getContext Dom_html._2d_
-
+let of_number x =
+  int_of_float (Js.float_of_number x)
 let get_mouse_event w h ev =
-  let x = min (w-1) (max 0 ev##.offsetX) in
-  let y = min (h-1) (max 0 ev##.offsetY) in
+  let x = min (w-1) (max 0 (of_number ev##.offsetX)) in
+  let y = min (h-1) (max 0 (of_number ev##.offsetY)) in
   let button = ev##.button in
   button, x, y
 let create s =
@@ -96,7 +97,7 @@ let set_context_logical_size ctx w h =
   let sh = float ctx##.canvas##.height /. float h in
   Js.Unsafe.set ctx (Js.string "__lwidth__") (float w);
   Js.Unsafe.set ctx (Js.string "__lheight__") (float h);
-  ctx## scale sw sh
+  ctx## scale (Js.float sw) (Js.float sh)
 
 let get_transform ctx : float * bool * bool =
   let a : float Js.Optdef.t = Js.Unsafe.get ctx (Js.string "__angle__") in
@@ -144,22 +145,23 @@ let blit_full _ctx (dst : surface) (src : surface) sx sy sw sh dx dy dw dh =
     let ty = fdy +. (0.5 *. fdh) in
     ctx##save;
     if a != 0.0 then begin
-      ctx##translate tx ty;
+      ctx##translate (Js.float tx) (Js.float ty);
       ctx##rotate a;
-      ctx##translate (-.tx) (-.ty)
+      ctx##translate (Js.float ~-.tx) (Js.float ~-.ty)
     end;
     let cx : float = Js.Unsafe.get _ctx (Js.string "__hflip__") in
     let cy : float = Js.Unsafe.get _ctx (Js.string "__vflip__") in
     if cx < 0.0 || cy < 0.0 then begin
       let tx = if cx < 0.0 then tx else 0.0 in
       let ty = if cy < 0.0 then ty else 0.0 in
-      ctx##translate tx ty;
-      ctx##scale cx cy;
-      ctx##translate (-.tx) (-.ty)
+      ctx##translate (Js.float tx) (Js.float ty);
+      ctx##scale (Js.float cx) (Js.float cy);
+      ctx##translate (Js.float ~-.tx) (Js.float ~-.ty)
     end
   end;
   ctx##drawImage_fullFromCanvas
-    src (float sx) (float sy) (float sw) (float sh) fdx fdy fdw fdh;
+    src (Js.float (float sx)) (Js.float (float sy)) (Js.float (float sw))
+    (Js.float (float sh)) (Js.float fdx) (Js.float fdy) (Js.float fdw) (Js.float fdh);
   if tst then ctx##restore
 
 let blit _ctx (dst : surface) (src : surface) x y =
@@ -195,10 +197,11 @@ let get_fillStyle ctx : Js.js_string Js.t =
   Js.Unsafe.get ctx (Js.string "fillStyle")
 
 
+
 let fill_rect _ctx dst x y w h =
   let ctx = dst##getContext Dom_html._2d_ in
   if ctx != _ctx then ctx##.fillStyle := get_fillStyle _ctx;
-  ctx##fillRect (float x) (float y) (float w) (float h)
+  ctx##fillRect (Js.float (float x)) (Js.float (float y)) (Js.float (float w)) (Js.float (float h))
 
 
 
@@ -211,7 +214,7 @@ let load_image ctx src =
     if not (is_ready ()) then failwith "Image is not ready";
     canvas##.width := img##.width;
     canvas##.height := img##.height;
-    (canvas##getContext Dom_html._2d_)##drawImage img 0.0 0.0;
+    (canvas##getContext Dom_html._2d_)##drawImage img (Js.float 0.0) (Js.float 0.0);
     canvas
   in
   { get; is_ready }
@@ -225,9 +228,9 @@ let measure_text_ctx ctx text font =
   ctx##.font := font;
   ctx##.textBaseline := Js.string "top";
   let m = ctx##measureText (Js.string text) in
-  let w = int_of_float (m##.width +. 1.0) in
+  let w = int_of_float (Js.float_of_number m##.width +. 1.0) in
   let m = ctx##measureText (Js.string "M") in
-  let h = int_of_float (m##.width *. 1.8) in
+  let h = int_of_float (Js.float_of_number m##.width *. 1.8) in
   (w, h)
 
 let measure_text text font =
@@ -245,7 +248,7 @@ let render_text _ctx text font =
   ctx##.fillStyle := get_fillStyle _ctx;
   ctx##.font := font;
   ctx##.textBaseline := Js.string "top";
-  ctx##fillText (Js.string text) 0.0 (float h *. 0.1);
+  ctx##fillText (Js.string text) (Js.float 0.0) (Js.float (float h *. 0.1));
   canvas
 
 let poll_event () =
@@ -256,10 +259,11 @@ let performance, now =
   let now = Js.Unsafe.get perf "now" in
   perf, now
 
-let performance_now () : float = Js.Unsafe.call now performance [||]
+let performance_now () : Js.number Js.t = Js.Unsafe.call now performance [||]
 let main_loop ?(limit=true) f k =
   let last_dt = ref 0.0 in
   let rec loop_limit dt =
+    let dt = Js.float_of_number dt in
     let d = dt -. !last_dt in
     if d >= 16. then
       let () = last_dt := dt in
@@ -269,6 +273,7 @@ let main_loop ?(limit=true) f k =
     else loop_limit (performance_now ())
   in
   let rec loop dt =
+    let dt = Js.float_of_number dt in
     match f dt with
       None -> ignore (Js.Unsafe.global##requestAnimationFrame loop)
     | Some res -> (k res)
