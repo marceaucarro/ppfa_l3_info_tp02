@@ -45,11 +45,12 @@ let player2_x = window_width - player1_x - player_width
 let player2_y = player1_y
 let player_color = Texture.blue
 
-(*Player's base speed.*)
-let player_v_up = Vector.{ x = 0.0; y = -0.3 }
+(*Player's movement constants.*)
+let player_v_up = Vector.{ x = 0.0; y = -5.0 }
 let player_v_down = Vector.sub Vector.zero player_v_up
 let player_v_left = Vector.{ x = -0.3; y = 0.0 }
 let player_v_right = Vector.sub Vector.zero player_v_left
+let player_v_jump = Vector.{ x = 0.0; y = -5.0 }
 
 (**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"

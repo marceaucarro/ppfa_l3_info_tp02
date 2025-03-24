@@ -9,7 +9,13 @@ let register key action = Hashtbl.replace action_table key action
 let handle_input () =
   let () =
     match Gfx.poll_event () with
-      KeyDown s -> set_key s
+      KeyDown s ->
+        Gfx.debug "%b\n%!" (has_key s);
+        (*if (s == " ") then begin
+          if not (has_key s) then set_key s
+          end
+        else*)
+          set_key s
     | KeyUp s -> unset_key s
     | Quit -> exit 0
     | _ -> ()
@@ -22,6 +28,7 @@ let () =
   register "d" (fun () -> Player.(move_player (player1()) Cst.player_v_right));
   register "z" (fun () -> Player.(move_player (player1()) Cst.player_v_up));
   register "s" (fun () -> Player.(move_player (player1()) Cst.player_v_down));
+  register " " (fun () -> Player.(move_player (player1()) Cst.player_v_jump));
   (*register "s" (fun () ->
       let global = Global.get () in
       global.waiting <- 1;
