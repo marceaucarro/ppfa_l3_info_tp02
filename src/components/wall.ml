@@ -13,6 +13,7 @@ let wall (x, y, txt, width, height) =
   e#mass#set infinity;
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
+  Move_system.(register (e :> t));
   Force_system.(register (e :> t));
   e
 

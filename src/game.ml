@@ -13,8 +13,8 @@ let update dt =
   let () = Input.handle_input () in
   Collision_system.update dt;
   Force_system.update dt;
-  Draw_system.update dt;
   Move_system.update dt;
+  Draw_system.update dt;
   None
 
 let (let@) f k = f k

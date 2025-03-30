@@ -63,7 +63,6 @@ class type collidable =
     inherit box
     inherit mass
     inherit velocity
-    inherit resolver
     inherit tagged
   end
 
@@ -104,7 +103,6 @@ class player name =
     inherit texture ()
     inherit mass ()
     inherit sum_forces ()
-    inherit resolver ()
   end
 
 class wall () =
@@ -117,7 +115,6 @@ class wall () =
     inherit texture ()
     inherit mass ()
     inherit sum_forces ()
-    inherit resolver ()
   end
 
 class block () =
