@@ -2,24 +2,24 @@ open Ecs
 open Component_defs
 open System_defs
 
-type tag += Player
-
-let player (name, x, y, txt, width, height, mass) =
+let player (name, x, y, txt, width, height, mass, elasticity) =
   let e = new player name in
   e#texture#set txt;
-  e#tag#set Player;
+  e#tag#set (Player (e));
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
   e#velocity#set Vector.zero;
   e#mass#set mass;
+  e#elasticity#set elasticity;
   Draw_system.(register (e :> t));
   Collision_system.(register (e :> t));
   Move_system.(register (e :> t));
+  Force_system.(register (e :> t));
   e
 
 let players () =  
-  player  Cst.("player1", player1_x, player1_y, player_color, player_width, player_height, player_mass),
-  player  Cst.("player2", player2_x, player2_y, player_color, player_width, player_height, player_mass)
+  player  Cst.("player1", player1_x, player1_y, player_color, player_width, player_height, player_mass, player_elasticity),
+  player  Cst.("player2", player2_x, player2_y, player_color, player_width, player_height, player_mass, player_elasticity)
 
 
 let player1 () = 

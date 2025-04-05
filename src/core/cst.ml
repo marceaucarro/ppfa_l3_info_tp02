@@ -36,7 +36,8 @@ let vwall_color = Texture.yellow
 let player_width = 60
 let player_height = 100
 
-let player_mass = 20.
+let player_mass = 80.
+let player_elasticity = 0.2
 
 let player1_x = window_width/4 + wall_thickness
 let player1_y = window_height - wall_thickness - player_height
@@ -45,11 +46,11 @@ let player2_x = window_width - player1_x - player_width
 let player2_y = player1_y
 let player_color = Texture.blue
 
-(*Player's base speed.*)
-let player_v_up = Vector.{ x = 0.0; y = -5.0 }
-let player_v_down = Vector.sub Vector.zero player_v_up
-let player_v_left = Vector.{ x = -5.0; y = 0.0 }
-let player_v_right = Vector.sub Vector.zero player_v_left
+(*Player's movement constants.*)
+let player_v_left = Vector.{ x = -0.5; y = 0.0 }
+let player_v_right = Vector.{ x = 0.5; y = 0.0 }
+let player_v_jump = Vector.{ x = 0.0; y = -1.4 }
+
 
 (**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"

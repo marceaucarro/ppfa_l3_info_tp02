@@ -9,11 +9,12 @@ let init dt =
 
 
 let update dt =
-  let () = Player.stop_players () in
+  (*let () = Player.stop_players () in*)
   let () = Input.handle_input () in
+  Force_system.update dt;
+  Move_system.update dt;
   Collision_system.update dt;
   Draw_system.update dt;
-  Move_system.update dt;
   None
 
 let (let@) f k = f k
