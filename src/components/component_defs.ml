@@ -23,6 +23,12 @@ class sum_forces () =
     method sum_forces = r
   end
 
+class elasticity () = (*Stocke l'élasticité de l'entité. Plus elle est élevée, plus elle rebondit.*)
+  let r = Component.init 0.0 in
+  object
+    method elasticity = r
+  end
+
 class box () =
   let r = Component.init Rect.{width = 0; height = 0} in
   object
@@ -37,7 +43,6 @@ class texture () =
 
 type tag = ..
 type tag += No_tag
-type tag += Wall
 
 class tagged () =
   let r = Component.init No_tag in
@@ -51,6 +56,12 @@ class resolver () =
     method resolve = r
   end
 
+class is_airborne () = (*Vérifie si l'entité est dans les airs.*)
+  let r = Component.init false in
+  object
+    method is_airborne = r
+  end
+
 (** Interfaces : ici on liste simplement les types des classes dont on hérite
     si deux classes définissent les mêmes méthodes, celles de la classe écrite
     après sont utilisées (héritage multiple).
@@ -62,6 +73,7 @@ class type collidable =
     inherit position
     inherit box
     inherit mass
+    inherit elasticity
     inherit velocity
     inherit tagged
   end
@@ -102,8 +114,12 @@ class player name =
     inherit tagged ()
     inherit texture ()
     inherit mass ()
+    inherit elasticity ()
     inherit sum_forces ()
+    inherit is_airborne ()
   end
+
+type tag += Player of player
 
 class wall () =
   object
@@ -114,18 +130,21 @@ class wall () =
     inherit tagged ()
     inherit texture ()
     inherit mass ()
+    inherit elasticity ()
     inherit sum_forces ()
   end
+
+type tag += Wall
 
 class block () =
   object
     inherit Entity.t ()
     inherit position ()
+    inherit velocity ()
     inherit box ()
-    inherit resolver ()
     inherit tagged ()
     inherit texture ()
     inherit mass ()
+    inherit elasticity ()
     inherit sum_forces ()
-    inherit velocity ()
   end

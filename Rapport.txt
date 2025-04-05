@@ -1,0 +1,25 @@
+
+Colisions:
+    - Un problème qui nous a bloqué quelque temps est que les joueurs passaient à travers le sol malgré le fait que les deux étaient dans colision system.
+        J'ai ensuite réalisé que c'était parce que le joueur avait un vecteur vélocité nul lors du calcul de colision, et comme lui et le mur
+        étaient considérés comme immobiles, on n'essayait pas de résoudre leur colision dans la fct de maj de colision.ml.
+        MAIS le joueur étant aussi soumis au système de forces, par conséquent son vecteur vélocité devrait être non-nul!
+        Sol: Dans game.ml, la gestion des colisions se faisait avant celle des forces, et les forces comme la gravité n'agissaient donc pas encore sur le joueur!
+
+Gestion du mouvement:
+    -Nous avons ensuite voulu gérer les sauts, notamment les sauts vers la gauche ou la droite.
+        Problème: Gfx.poll_event ne prend en compte que la touche appuyée le plus recemment, donc si on saute en allant vers la droite, on monte tout droit,
+        puis on va à droite (mouvement peu naturel).
+        Sol: Dans player.ml, on garde en mémoire l'event de la boucle précédente (object LastEvent): si quand on saute on était en train d'aller vers la droite
+        (KeyDown "d"), alors on saute vers la droite. Sinon (KeyUp "d", NoEvent ou autre), on ne saute pas vers la droite.
+    -Création classe isAirborne vérifiant si le joueur est dans les airs ou non (présence d'une colision venant d'en bas). Permet de désactiver le saut en l'air.
+    -Mise en place dans input.ml d'une accélération progréssive. (On ne va plus immédiatement à la vitesse max)
+
+    -Création d'un composant elasticité comme conseillé dans le fichier colision: Comme il y avait une élasticité fixe de 0.75, le joueur avait tendance à
+    rebondir comme un ballon lorsqu'il touchait le sol.
+
+
+Je propose qu'on supprime resolver à terme, car on ne s'en sert nulle part autre que dans component_defs où il est défini.
+Suppression de l'appel à stop_players dans input + modification des inputs de mouvement pour s'additionner à la vélocité de la frame précédente
+au lieu de la remplacer pour un mouvement plus fluide et réaliste. Cela rend Last_event inutile, qui était là pour faire un saut plus alongé en fonction de
+si on appuyait sur les touches de mouvement la frame d'avant. On pourrait le supprimer.

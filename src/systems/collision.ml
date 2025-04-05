@@ -43,6 +43,11 @@ let update _ el =
                 if Vector.norm v <= Vector.norm min_v then v else min_v)
               d [ a; b; c ]
           in
+          if (n.x == d.x && n.y == d.y) then begin (*Colision par le dessous*)
+            match e1#tag#get, e2#tag#get with
+              Player(p), _ | _, Player(p) -> p#is_airborne#set false;
+              | _ -> ()
+          end;
           (*  [4] rapport des vitesses et déplacement des objets *)
           let n_v1 = Vector.norm v1 in
           let n_v2 = Vector.norm v2 in
@@ -70,7 +75,7 @@ let update _ el =
           (* Elasticité fixe. En pratique, l'elasticité peut être stockée dans
             les objets comme un composant : 1 pour la balle et les murs, 0.5 pour
             des obstacles absorbants, 1.2 pour des obstacles rebondissant, … *)
-          let e = 0.75 in
+          let e = (e1#elasticity#get +. e2#elasticity#get) /. 2. in
           (* normalisation des masses *)
           let m1, m2 =
             if Float.is_infinite m1 && Float.is_infinite m2 then
