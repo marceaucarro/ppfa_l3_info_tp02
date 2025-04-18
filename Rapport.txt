@@ -23,3 +23,6 @@ Je propose qu'on supprime resolver à terme, car on ne s'en sert nulle part autr
 Suppression de l'appel à stop_players dans input + modification des inputs de mouvement pour s'additionner à la vélocité de la frame précédente
 au lieu de la remplacer pour un mouvement plus fluide et réaliste. Cela rend Last_event inutile, qui était là pour faire un saut plus alongé en fonction de
 si on appuyait sur les touches de mouvement la frame d'avant. On pourrait le supprimer.
+
+Création d'une classe enemy représentant les ennemis.
+    -Constante limit_x et limit_y pour délimiter jusqu'où ils pourront marcher.

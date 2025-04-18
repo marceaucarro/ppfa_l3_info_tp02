@@ -43,7 +43,7 @@ let update _ el =
                 if Vector.norm v <= Vector.norm min_v then v else min_v)
               d [ a; b; c ]
           in
-          if (n.x == d.x && n.y == d.y) then begin (*Colision par le dessous*)
+          if (n.x == c.x && n.y == c.y) then begin (*Colision par le dessous*)
             match e1#tag#get, e2#tag#get with
               Player(p), _ | _, Player(p) -> p#is_airborne#set false;
               | _ -> ()
@@ -60,7 +60,7 @@ let update _ el =
           let pos2 = Vector.add pos2 delta_pos2 in
           let s_pos, s_rect = Rect.mdiff pos2 box2 pos1 box1 in
           if Rect.has_origin s_pos s_rect then begin
-            Gfx.debug "%f, %f, %d x %d\n" s_pos.Vector.x s_pos.Vector.y
+            Gfx.debug "%f, %f, %d x %d\n%!" s_pos.Vector.x s_pos.Vector.y
               s_rect.Rect.width s_rect.Rect.height
           end;
           e1#position#set pos1;

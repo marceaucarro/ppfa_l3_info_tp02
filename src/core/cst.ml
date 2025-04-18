@@ -32,7 +32,7 @@ let vwall2_x = window_width - wall_thickness
 let vwall2_y = vwall1_y
 let vwall_color = Texture.yellow
 
-(**************************************Entities*******************************)
+(**************************************Player*********************************)
 let player_width = 60
 let player_height = 100
 
@@ -51,6 +51,18 @@ let player_v_left = Vector.{ x = -0.5; y = 0.0 }
 let player_v_right = Vector.{ x = 0.5; y = 0.0 }
 let player_v_jump = Vector.{ x = 0.0; y = -1.4 }
 
+(**************************************Enemy**********************************)
+
+let enemy_color = Texture.red
+
+let enemy_width = 60
+let enemy_height = 100
+
+let enemy_mass = 80.
+let enemy_elasticity = 0.2
+
+let enemy_x = window_width*3/4 - wall_thickness   (*Pourrait devenir un tableau éventuellement*)
+let enemy_y = window_height - wall_thickness - player_height
 
 (**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"
