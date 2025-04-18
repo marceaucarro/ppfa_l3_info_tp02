@@ -1,4 +1,11 @@
 open Ecs
+
+class id () = (*Class to tell apart entities such as enemies*)
+  let r = Component.init 0 in
+  object
+    method id = r
+  end
+
 class position () =
   let r = Component.init Vector.zero in
   object
@@ -135,6 +142,23 @@ class wall () =
   end
 
 type tag += Wall
+
+class enemy =
+  object
+    inherit Entity.t ()
+    inherit id ()
+    inherit position ()
+    inherit velocity ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit mass ()
+    inherit elasticity ()
+    inherit sum_forces ()
+  end
+
+type tag += Enemy of enemy (**)
+
 
 class block () =
   object

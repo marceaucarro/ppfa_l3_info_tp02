@@ -29,6 +29,7 @@ let run () =
   let ctx = Gfx.get_context window in
   let () = Gfx.set_context_logical_size ctx 800 600 in
   let _walls = Wall.walls () in
+  let _enemies = Enemy.enemies () in
   let player1, player2 = Player.players () in
   let global = Global.{ window; ctx; player1; player2; waiting = 1; } in
   Global.set global;
