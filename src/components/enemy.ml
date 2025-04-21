@@ -5,11 +5,13 @@ open System_defs
 let enemy (id, x, y, txt, width, height, mass, elasticity) =
   let e = new enemy in
   e#id#set id;
-  e#texture#set txt;
   e#tag#set (Enemy (e));
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
   e#velocity#set Vector.zero;
+  let textures = e#texture#get in(*A dégager ensuite*)
+  textures.(0).(0) <- txt;
+  e#texture#set textures;
   e#mass#set mass;
   e#elasticity#set elasticity;
   Draw_system.(register (e :> t));
@@ -18,14 +20,13 @@ let enemy (id, x, y, txt, width, height, mass, elasticity) =
   Force_system.(register (e :> t));
   e
 
+(*Creates a list of enemies for Global*)
 let enemies () =  
-  enemy Cst.(1, enemy_x, enemy_y, enemy_color, enemy_width, enemy_height, enemy_mass, enemy_elasticity)
+  [enemy Cst.(1, enemy_x, enemy_y, enemy_color, enemy_width, enemy_height, enemy_mass, enemy_elasticity)]
 
-let player1 () = 
-  let Global.{player1; _ } = Global.get () in
-  player1
 
-let player2 () =
+(*Gets all created enemies*)
+let get_enemies () =
   let Global.{player2; _ } = Global.get () in
   player2
 

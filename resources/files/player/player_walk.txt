@@ -1,0 +1,4 @@
+player_walk_0.png
+player_walk_1.png
+player_walk_2.png
+player_walk_3.png

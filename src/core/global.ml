@@ -5,7 +5,8 @@ type t = {
   ctx : Gfx.context;
   player1 : player;
   player2 : player;
-  mutable waiting : int;
+  _enemies : enemy list;
+  _walls : wall list;
 }
 
 let state = ref None

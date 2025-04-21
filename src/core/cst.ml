@@ -1,13 +1,6 @@
-(*
-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-V                               V
-V  1                         2  V
-V  1 B                       2  V
-V  1                         2  V
-V  1                         2  V
-V                               V
-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-*)
+(**************************************General********************************)
+(*The number of frames before the next sprite in the loop is played.*)
+let fps = 7. (*The animations will play at 7 fps.*)
 
 (**************************************Window*********************************)
 let window_width = 800
@@ -45,6 +38,9 @@ let player1_y = window_height - wall_thickness - player_height
 let player2_x = window_width - player1_x - player_width
 let player2_y = player1_y
 let player_color = Texture.blue
+
+(*List of the files containing the player's sprite sets.*)
+let player_sprites = ["player_idle.txt"; "player_walk.txt"; "player_run.txt"; "player_jump_still.txt"]
 
 (*Player's movement constants.*)
 let player_v_left = Vector.{ x = -0.5; y = 0.0 }

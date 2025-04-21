@@ -26,3 +26,21 @@ si on appuyait sur les touches de mouvement la frame d'avant. On pourrait le sup
 
 Création d'une classe enemy représentant les ennemis.
     -Constante limit_x et limit_y pour délimiter jusqu'où ils pourront marcher.
+
+Sprites:
+    Nous avons téléchargé des set de sprites en libre service sur les pages suivantes :
+    - Player : https://opengameart.org/content/adventure-series-character-agent-sms.
+    - Enemy :
+    - Wall :
+    Nous nous sommes servi d'un éditeur de sprites en ligne appelé Piskel, afin d'en extraire les différentes animations.
+    (Les images individuelles sont dispo. dans "ressources/images/<nom_entité>_sprites") 
+
+    Ensuite, en s'inspirant du TP01, nous avons modifié la classe texture pour qu'il contienne un Array d'Array de textures,
+    chaque sous-array contenant un sprite set (marche, saut...), et deux entiers : un donnant le sprite set actuel, et un autre donnant le sprite actuel.
+    Image 16x30, offset 0x25 exporté en scale 8.0x -> la résolution devient 128x240.
+
+    Les sprites sont ainsi chargés par la fonction load_ressources de game.ml, qui a son tour appelle les fonctions load_textures des entités.
+    Enfin, on se sert la fonction update du systême Draw qui appelle à son tour les fonctions update de chaque type d'entité.
+    Chacune d'entre elles va analyser la situation de l'entité pour savoir quelle animation afficher.
+
+But actuel : Coder les checkpoints + coder comportement ennemis (mettre en place un x/y limite pour qu'ils n'aillent pas plus loin, un mode calme/alerte...)
