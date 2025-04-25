@@ -15,6 +15,18 @@ class id () = (*Class to tell apart entities such as enemies*)
     method id = r
   end
 
+class id_level () =
+  let r = Component.init 0 in
+  object
+    method id_level = r
+  end
+
+class id_plan () =
+  let r = Component.init 0 in
+  object
+    method id_plan = r
+  end
+
 class tagged () =
   let r = Component.init No_tag in
   object
@@ -231,24 +243,6 @@ class button () =
 type tag += Button of button
 
 
-class wall () =
-  object
-    inherit Entity.t ()
-    inherit position ()
-    inherit velocity ()
-    inherit box ()
-    inherit tagged ()
-    inherit texture ()
-    inherit current_sprite_set ()
-    inherit current_sprite ()
-    inherit last_dt ()
-    inherit mass ()
-    inherit elasticity ()
-    inherit sum_forces ()
-  end
-
-type tag += Wall
-
 
 class block () =
   object
@@ -267,44 +261,30 @@ class block () =
   end
 
 
-class level () =
-  object
-    inherit Entity.t ()
-    inherit tagged ()
-    inherit id ()
-    inherit position ()
-    inherit box ()
-  end
-
-
-class plan () =
-  object
-    inherit Entity.t ()
-    inherit tagged ()
-    inherit id ()
-    inherit position ()
-    inherit box ()
-    (* inherit tiles () *)
-  end
-
-
 class tile () =
   object
     inherit Entity.t ()
+    inherit id ()
+    inherit id_level ()
+    inherit id_plan ()
+    inherit tagged ()
     inherit position ()
     inherit velocity ()
     inherit box ()
     inherit texture ()
     inherit current_sprite_set ()
     inherit current_sprite ()
-    inherit last_dt ()
-    inherit tagged ()
+    inherit last_dt
   end
 
+type tag += Tile
 
-class touchabletile () =
+class wall () =
   object
     inherit tile ()
     inherit mass ()
     inherit elasticity ()
   end
+
+type tag += Wall
+

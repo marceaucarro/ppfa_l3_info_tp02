@@ -37,8 +37,10 @@ let run () =
   let _walls = Wall.walls () in
   let _enemies = Enemy.enemies () in
   let _buttons = Button.buttons () in
-  let player1, player2 = Player.players () in
-  let global = Global.{ window ; ctx ; player1 ; player2 ; _enemies ; _walls ; _buttons } in
+  let player1, _ = Player.players () in
+  let current_level = Component.init 0 in
+  let _tiles = Tile.tiles () in
+  let global = Global.{ window ; ctx ; player1 ; _enemies ; _walls ; _buttons ; current_level ; _tiles } in
   Global.set global ;
   let@ () = Gfx.main_loop ~limit:false init in
   load_ressources ctx ;

@@ -76,8 +76,17 @@ let enemy_x = window_width*3/4 - wall_thickness   (*Pourrait devenir un tableau 
 let enemy_y = window_height - wall_thickness - player_height
 
 (**************************************Button***********************************)
-let buttons_sprites = [(1, "tuto/tuto_button.txt")]
+let buttons_sprites = [(1, "tuto_button.txt")]
 
+(**************************************Tile***********************************)
+let tile_width = 64
+let tile_height = 64
+let tiles_sprites = "tiles/tiles.txt"
+
+(**************************************Level***********************************)
+let nb_levels = 3
+let length_levels = 
+let def_levels = [(0, "level0.txt") ; (1, "level1.txt") ; (2, "level2.txt")]
 (**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"
 let font_color = Gfx.color 0 0 0 255
