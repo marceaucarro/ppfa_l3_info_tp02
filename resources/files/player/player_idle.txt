@@ -1,0 +1,4 @@
+player_idle_0.png
+player_idle_1.png
+player_idle_2.png
+player_idle_3.png

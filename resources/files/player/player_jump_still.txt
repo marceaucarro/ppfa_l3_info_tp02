@@ -1,0 +1,2 @@
+player_jump_still_0.png
+player_jump_still_1.png
