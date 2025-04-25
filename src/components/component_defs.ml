@@ -1,15 +1,24 @@
 open Ecs
 
+(****************************************************************************
+*                                                                           *
+*                                Composants                                 *
+*                                                                           *
+****************************************************************************)
+
+type tag = ..
+type tag += No_tag
+
 class id () = (*Class to tell apart entities such as enemies*)
   let r = Component.init 0 in
   object
     method id = r
   end
 
-class last_dt () = (*Time at which the last sprite change occured for the entity.*)
-  let r = Component.init 0.0 in
+class tagged () =
+  let r = Component.init No_tag in
   object
-    method last_dt = r
+    method tag = r
   end
 
 class position () =
@@ -24,22 +33,23 @@ class velocity () =
     method velocity = r
   end
 
-  class mass () =
+class mass () =
   let r = Component.init 0.0 in
   object
     method mass = r
-  end
-
-class sum_forces () =
-  let r = Component.init Vector.zero in
-  object
-    method sum_forces = r
   end
 
 class elasticity () = (*Stocke l'élasticité de l'entité. Plus elle est élevée, plus elle rebondit.*)
   let r = Component.init 0.0 in
   object
     method elasticity = r
+  end
+
+
+class sum_forces () =
+  let r = Component.init Vector.zero in
+  object
+    method sum_forces = r
   end
 
 class box () =
@@ -53,7 +63,7 @@ class box () =
 (*The sprites should ALWAYS face right if they have a direction! (So to make them face the right direction if they're moving.)*)
 class texture () =
   (*Current value is a placeholder for the entity's load_textures function.*)
-  let r = Component.init (Array.init 1 (fun i -> Array.make 1 Texture.black)) in
+  let r = Component.init (Array.init 1 ( fun i -> Array.make 1 Texture.transparent )) in
   object
     method texture = r
   end
@@ -72,19 +82,10 @@ class current_sprite () =
     method current_sprite = r
   end
 
-type tag = ..
-type tag += No_tag
-
-class tagged () =
-  let r = Component.init No_tag in
+class last_dt () = (*Time at which the last sprite change occured for the entity.*)
+  let r = Component.init 0.0 in
   object
-    method tag = r
-  end
-
-class resolver () =
-  let r = Component.init (fun (_ : Vector.t) (_ : tagged) -> ()) in
-  object
-    method resolve = r
+    method last_dt = r
   end
 
 class is_airborne () = (*Vérifie si l'entité est dans les airs.*)
@@ -111,10 +112,18 @@ class clicked () =
     method clicked = r
   end
 
-(** Interfaces : ici on liste simplement les types des classes dont on hérite
-    si deux classes définissent les mêmes méthodes, celles de la classe écrite
-    après sont utilisées (héritage multiple).
-*)
+class resolver () =
+  let r = Component.init (fun (_ : Vector.t) (_ : tagged) -> ()) in
+  object
+    method resolve = r
+  end
+
+
+(****************************************************************************
+*                                                                           *
+*                               Interfaces                                  *
+*                                                                           *
+****************************************************************************)
 
 class type collidable =
   object
@@ -155,10 +164,13 @@ class type physics =
     inherit velocity
   end
 
-(** Entités :
-    Ici, dans inherit, on appelle les constructeurs pour qu'ils initialisent
-    leur partie de l'objet, d'où la présence de l'argument ()
-*)
+
+(****************************************************************************
+*                                                                           *
+*                                 Entités                                   *
+*                                                                           *
+****************************************************************************)
+
 class player name =
   object
     inherit Entity.t ~name ()
@@ -178,23 +190,6 @@ class player name =
 
 type tag += Player of player
 
-class wall () =
-  object
-    inherit Entity.t ()
-    inherit position ()
-    inherit velocity ()
-    inherit box ()
-    inherit tagged ()
-    inherit texture ()
-    inherit current_sprite_set ()
-    inherit current_sprite ()
-    inherit last_dt ()
-    inherit mass ()
-    inherit elasticity ()
-    inherit sum_forces ()
-  end
-
-type tag += Wall
 
 class enemy () =
   object
@@ -216,61 +211,6 @@ class enemy () =
 type tag += Enemy of enemy (**)
 
 
-class block () =
-  object
-    inherit Entity.t ()
-    inherit position ()
-    inherit velocity ()
-    inherit box ()
-    inherit tagged ()
-    inherit texture ()
-    inherit current_sprite_set ()
-    inherit current_sprite ()
-    inherit last_dt ()
-    inherit mass ()
-    inherit elasticity ()
-    inherit sum_forces ()
-  end
-
-class level () =
-  object
-    inherit Entity.t ()
-    inherit tagged ()
-    inherit id ()
-    inherit position ()
-    inherit box ()
-  end
-
-class plan () =
-  object
-    inherit Entity.t ()
-    inherit tagged ()
-    inherit id ()
-    inherit position ()
-    inherit box ()
-    (* inherit tiles () *)
-  end
-
-class tile () =
-  object
-    inherit Entity.t ()
-    inherit position ()
-    inherit velocity ()
-    inherit box ()
-    inherit texture ()
-    inherit current_sprite_set ()
-    inherit current_sprite ()
-    inherit last_dt ()
-    inherit tagged ()
-  end
-
-class touchabletile () =
-  object
-    inherit tile ()
-    inherit mass ()
-    inherit elasticity ()
-  end
-
 class button () =
   object
     inherit Entity.t ()
@@ -289,3 +229,82 @@ class button () =
   end
 
 type tag += Button of button
+
+
+class wall () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit velocity ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit current_sprite_set ()
+    inherit current_sprite ()
+    inherit last_dt ()
+    inherit mass ()
+    inherit elasticity ()
+    inherit sum_forces ()
+  end
+
+type tag += Wall
+
+
+class block () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit velocity ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit current_sprite_set ()
+    inherit current_sprite ()
+    inherit last_dt ()
+    inherit mass ()
+    inherit elasticity ()
+    inherit sum_forces ()
+  end
+
+
+class level () =
+  object
+    inherit Entity.t ()
+    inherit tagged ()
+    inherit id ()
+    inherit position ()
+    inherit box ()
+  end
+
+
+class plan () =
+  object
+    inherit Entity.t ()
+    inherit tagged ()
+    inherit id ()
+    inherit position ()
+    inherit box ()
+    (* inherit tiles () *)
+  end
+
+
+class tile () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit velocity ()
+    inherit box ()
+    inherit texture ()
+    inherit current_sprite_set ()
+    inherit current_sprite ()
+    inherit last_dt ()
+    inherit tagged ()
+  end
+
+
+class touchabletile () =
+  object
+    inherit tile ()
+    inherit mass ()
+    inherit elasticity ()
+  end

@@ -2,6 +2,7 @@
 (*The number of frames before the next sprite in the loop is played.*)
 let fps = 7. (*The animations will play at 7 fps.*)
 
+(**************************************Font***********************************)
 let tutoriel = [|
     [|0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0|] ;
     [|0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0;0|] ;
@@ -15,6 +16,7 @@ let tutoriel = [|
     [|1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1|] ;
     [|1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1;1|]
     |]
+
 (**************************************Window*********************************)
 let window_width = 800
 let window_height = 600
@@ -54,7 +56,6 @@ let player_color = Texture.blue
 
 (*List of the files containing the player's sprite sets.*)
 let player_sprites = ["player_idle.txt"; "player_walk.txt"; "player_run.txt"; "player_jump_still.txt"]
-let buttons_sprites = [(1, "tuto/tuto_button.txt")]
 
 (*Player's movement constants.*)
 let player_v_left = Vector.{ x = -0.5; y = 0.0 }
@@ -73,6 +74,9 @@ let enemy_elasticity = 0.2
 
 let enemy_x = window_width*3/4 - wall_thickness   (*Pourrait devenir un tableau éventuellement*)
 let enemy_y = window_height - wall_thickness - player_height
+
+(**************************************Button***********************************)
+let buttons_sprites = [(1, "tuto/tuto_button.txt")]
 
 (**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"

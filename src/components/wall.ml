@@ -1,32 +1,30 @@
 open Component_defs
 open System_defs
 
-(*type tag += Wall*)
-
 let wall (x, y, txt, width, height, mass, elasticity) =
   let e = new wall () in
-  e#tag#set Wall;
-  e#position#set Vector.{x = float x; y = float y};
-  e#box#set Rect.{width; height};
-  e#velocity#set Vector.zero;
-  let textures = e#texture#get in(*Dégager cette ligne et les 2 suivantes ensuite*)
-  textures.(0).(0) <- txt;
-  e#texture#set textures;
-  e#mass#set mass;
-  e#elasticity#set elasticity;
-  Draw_system.(register (e :> t));
-  Collision_system.(register (e :> t));
-  Move_system.(register (e :> t));
-  Force_system.(register (e :> t));
+  e#tag#set Wall ;
+  e#position#set Vector.{ x = float x ; y = float y } ;
+  e#velocity#set Vector.zero ;
+  e#mass#set mass ;
+  e#elasticity#set elasticity ;
+  e#box#set Rect.{ width ; height} ;
+  let textures = e#texture#get in (* Dégager cette ligne et les 2 suivantes ensuite *)
+  textures.(0).(0) <- txt ;
+  e#texture#set textures ;
+  Collision_system.(register (e :> t)) ;
+  Draw_system.(register (e :> t)) ;
+  Move_system.(register (e :> t)) ;
+  Force_system.(register (e :> t)) ;
   e
 
 let walls () = 
   List.map wall
     Cst.[ 
-      (hwall1_x, hwall1_y, hwall_color, hwall_width, hwall_height, infinity, 0.0);
-      (hwall2_x, hwall2_y, hwall_color, hwall_width, hwall_height, infinity, 0.0);
-      (vwall1_x, vwall1_y, vwall_color, vwall_width, vwall_height, infinity, 0.0);
-      (vwall2_x, vwall2_y, vwall_color, vwall_width, vwall_height, infinity, 0.0);
+      (hwall1_x, hwall1_y, hwall_color, hwall_width, hwall_height, infinity, 0.0) ;
+      (hwall2_x, hwall2_y, hwall_color, hwall_width, hwall_height, infinity, 0.0) ;
+      (vwall1_x, vwall1_y, vwall_color, vwall_width, vwall_height, infinity, 0.0) ;
+      (vwall2_x, vwall2_y, vwall_color, vwall_width, vwall_height, infinity, 0.0) ;
     ]
 
 (**Loads one of the wall's sprite sets into component texture at index i.*)

@@ -1,6 +1,6 @@
 open Vector
 
-type t = { width : int; height : int }
+type t = { width : int ; height : int }
 
 
 (* We use the Minkowski difference of Box1 and Box2:
@@ -47,10 +47,10 @@ let is_zero f = f = 0.0 || f = -0.0
 
 *)
 let penetration_vector s_pos s_rect =
-  let n0 = Vector.{ x = 0.0; y = s_pos.y } in
-  let n1 = min_norm n0 Vector.{ x = 0.0; y = float s_rect.height +. s_pos.y } in
-  let n2 = min_norm n1 Vector.{ x = s_pos.x; y = 0.0 } in
-  min_norm n2 Vector.{ x = float s_rect.width +. s_pos.x; y = 0.0 }
+  let n0 = Vector.{ x = 0.0 ; y = s_pos.y } in
+  let n1 = min_norm n0 Vector.{ x = 0.0 ; y = float s_rect.height +. s_pos.y } in
+  let n2 = min_norm n1 Vector.{ x = s_pos.x ; y = 0.0 } in
+  min_norm n2 Vector.{ x = float s_rect.width +. s_pos.x ; y = 0.0 }
 
 (* Returns None if the two boxes don't intersect and Some v
    if they do, where v is the rebound to apply, assuming one
@@ -60,6 +60,6 @@ let rebound v1 r1 v2 r2 =
   let s_pos, s_rect = mdiff v1 r1 v2 r2 in
   if has_origin s_pos s_rect then
     let n = penetration_vector s_pos s_rect in
-    Some (if is_zero n.x then Vector.{ x = 1.0; y = -1.0 } else
-            Vector.{x = -1.0; y = 1.0 })
+    Some (if is_zero n.x then Vector.{ x = 1.0 ; y = -1.0 } else
+            Vector.{x = -1.0 ; y = 1.0 })
   else None
