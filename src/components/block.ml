@@ -5,10 +5,12 @@ open System_defs
 
 let create (x, y, v, txt, width, height, mass) =
   let e = new block () in
-  e#texture#set txt;
   e#position#set Vector.{x=float x;y = float y};
-  e#velocity#set v;
   e#box#set Rect.{width;height};
+  e#velocity#set v;
+  let textures = e#texture#get in(*A dégager ensuite*)
+  textures.(0).(0) <- txt;
+  e#texture#set textures;
   e#mass#set mass;
   Collision_system.(register (e:>t));
   Move_system.(register (e:>t));

@@ -1,0 +1,4 @@
+enemy_walk_0.png
+enemy_walk_1.png
+enemy_walk_2.png
+enemy_walk_3.png

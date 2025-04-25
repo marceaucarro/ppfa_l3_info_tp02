@@ -1,19 +1,29 @@
-(*
-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-V                               V
-V  1                         2  V
-V  1 B                       2  V
-V  1                         2  V
-V  1                         2  V
-V                               V
-HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
-*)
+(**************************************General********************************)
+(*The number of frames before the next sprite in the loop is played.*)
+let fps = 7. (*The animations will play at 7 fps.*)
 
 (**************************************Window*********************************)
 let window_width = 800
 let window_height = 600
+let logical_width = 800
+let logical_height = 600
 
-(**************************************Walls**********************************)
+(**************************************Level***********************************)
+let decor_tilesets = ["level_0.txt"]
+
+(*Decor tiles to display from left to right.
+Each tupple has the index to the tile to take from the decor's texture component (in this case, in sub-array 0),
+as well as the width of the tile, the height, and whether if should be flipped vertically.*)
+let lvl_0_pattern =
+  [(0, (210*logical_height/250), (250*logical_height/250), false);
+  (1, (210*logical_height/250), (250*logical_height/250), false);
+  (2, (210*logical_height/250), (250*logical_height/250), false);
+  (3, (115*logical_height/250), (250*logical_height/250), false)]
+
+(*List of all levels' display patterns.*)
+let lvl_patterns = [|lvl_0_pattern|]
+
+(**************************************Walls***********************************)
 let wall_thickness = 32
 
 let hwall_width = window_width
@@ -46,6 +56,9 @@ let player2_x = window_width - player1_x - player_width
 let player2_y = player1_y
 let player_color = Texture.blue
 
+(*List of the files containing the player's sprite sets.*)
+let player_sprites = ["player_idle.txt"; "player_walk.txt"; "player_run.txt"; "player_jump_still.txt"]
+
 (*Player's movement constants.*)
 let player_v_left = Vector.{ x = -0.5; y = 0.0 }
 let player_v_right = Vector.{ x = 0.5; y = 0.0 }
@@ -63,6 +76,8 @@ let enemy_elasticity = 0.2
 
 let enemy_x = window_width*3/4 - wall_thickness   (*Pourrait devenir un tableau éventuellement*)
 let enemy_y = window_height - wall_thickness - player_height
+
+let enemy_sprites = ["enemy_idle.txt"; "enemy_walk.txt"; "enemy_run.txt"; "enemy_jump_still.txt"]
 
 (**************************************Font***********************************)
 let font_name = if Gfx.backend = "js" then "monospace" else "resources/images/monospace.ttf"

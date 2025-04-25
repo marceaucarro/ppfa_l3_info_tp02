@@ -1,0 +1,4 @@
+player_run_0.png
+player_run_1.png
+player_run_2.png
+player_run_3.png

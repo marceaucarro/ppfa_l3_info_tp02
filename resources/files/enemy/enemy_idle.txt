@@ -1,0 +1,4 @@
+enemy_idle_0.png
+enemy_idle_1.png
+enemy_idle_2.png
+enemy_idle_3.png

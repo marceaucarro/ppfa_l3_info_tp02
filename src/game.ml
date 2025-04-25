@@ -7,9 +7,13 @@ let init dt =
   Ecs.System.init_all dt;
   Some ()
 
+let load_ressources ctx =
+  Decor.load_textures ctx 0;
+  Player.load_textures ctx;
+  Enemy.load_textures ctx
+  (*Wall.load_textures ctx...*)
 
 let update dt =
-  (*let () = Player.stop_players () in*)
   let () = Input.handle_input () in
   Force_system.update dt;
   Move_system.update dt;
@@ -27,11 +31,13 @@ let run () =
   in
   let window = Gfx.create  window_spec in
   let ctx = Gfx.get_context window in
-  let () = Gfx.set_context_logical_size ctx 800 600 in
+  let () = Gfx.set_context_logical_size ctx Cst.logical_width Cst.logical_height in
   let _walls = Wall.walls () in
   let _enemies = Enemy.enemies () in
+  let decor = Decor.decors () in
   let player1, player2 = Player.players () in
-  let global = Global.{ window; ctx; player1; player2; waiting = 1; } in
+  let global = Global.{ window; ctx; player1; player2; _enemies; _walls; decor} in
   Global.set global;
   let@ () = Gfx.main_loop ~limit:false init in
+  load_ressources ctx;
   let@ () = Gfx.main_loop update in ()

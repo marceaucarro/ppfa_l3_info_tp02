@@ -6,6 +6,12 @@ class id () = (*Class to tell apart entities such as enemies*)
     method id = r
   end
 
+class last_dt () = (*Time at which the last sprite change occured for the entity.*)
+  let r = Component.init 0.0 in
+  object
+    method last_dt = r
+  end
+
 class position () =
   let r = Component.init Vector.zero in
   object
@@ -42,10 +48,28 @@ class box () =
     method box = r
   end
 
+(*Array of sprite sets (= array of Texture.images) for the entity.
+  For example, the player's will have sprite sets for walking, running, jumping...*)
+(*The sprites should ALWAYS face right if they have a direction! (So to make them face the right direction if they're moving.)*)
 class texture () =
-  let r = Component.init (Texture.Color (Gfx.color 0 0 0 255)) in
+  (*Current value is a placeholder for the entity's load_textures function.*)
+  let r = Component.init (Array.init 1 (fun i -> Array.make 1 Texture.black)) in
   object
     method texture = r
+  end
+
+(*The sprite set (sub-array of texture component) in which the current sprite for the entity is displayed.*)
+class current_sprite_set () =
+  let r = Component.init 0 in
+  object
+    method current_sprite_set = r
+  end
+
+(**The sprite currently displayed for the entity.*)
+class current_sprite () =
+  let r = Component.init 0 in
+  object
+    method current_sprite = r
   end
 
 type tag = ..
@@ -63,7 +87,7 @@ class resolver () =
     method resolve = r
   end
 
-class is_airborne () = (*Vérifie si l'entité est dans les airs.*)
+class is_airborne () = (*Checks whether an entity is airborne.*)
   let r = Component.init false in
   object
     method is_airborne = r
@@ -91,6 +115,9 @@ class type drawable =
     inherit position
     inherit box
     inherit texture
+    inherit current_sprite_set
+    inherit current_sprite
+    inherit tagged
   end
 
 class type movable =
@@ -120,6 +147,9 @@ class player name =
     inherit box ()
     inherit tagged ()
     inherit texture ()
+    inherit current_sprite_set ()
+    inherit current_sprite ()
+    inherit last_dt ()
     inherit mass ()
     inherit elasticity ()
     inherit sum_forces ()
@@ -136,6 +166,9 @@ class wall () =
     inherit box ()
     inherit tagged ()
     inherit texture ()
+    inherit current_sprite_set ()
+    inherit current_sprite ()
+    inherit last_dt ()
     inherit mass ()
     inherit elasticity ()
     inherit sum_forces ()
@@ -146,19 +179,34 @@ type tag += Wall
 class enemy =
   object
     inherit Entity.t ()
-    inherit id ()
     inherit position ()
     inherit velocity ()
     inherit box ()
     inherit tagged ()
     inherit texture ()
+    inherit current_sprite_set ()
+    inherit current_sprite ()
+    inherit last_dt ()
     inherit mass ()
     inherit elasticity ()
     inherit sum_forces ()
+    inherit is_airborne ()
   end
 
-type tag += Enemy of enemy (**)
+type tag += Enemy of enemy
 
+class decor () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit current_sprite_set () (*Index of the current tile set (the index also indicates the value of the level currently being played).*)
+    inherit current_sprite ()
+  end
+
+type tag += Decor of decor
 
 class block () =
   object
@@ -168,6 +216,9 @@ class block () =
     inherit box ()
     inherit tagged ()
     inherit texture ()
+    inherit current_sprite_set ()
+    inherit current_sprite ()
+    inherit last_dt ()
     inherit mass ()
     inherit elasticity ()
     inherit sum_forces ()
