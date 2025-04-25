@@ -43,11 +43,16 @@ let update _ el =
                 if Vector.norm v <= Vector.norm min_v then v else min_v)
               d [ a; b; c ]
           in
-          if (n.x == c.x && n.y == c.y) then begin (*Colision par le dessous*)
+          if (n = c) then begin (*Colision venant d'au dessus.*)
             match e1#tag#get, e2#tag#get with
-              Player(p), _ | _, Player(p) -> p#is_airborne#set false;
+              Player(p), _ -> p#is_airborne#set false;
               | _ -> ()
-          end;
+            end
+          else if (n = d) then begin (*Colision venant d'en dessous.*)
+            match e1#tag#get, e2#tag#get with
+              _, Player (p) -> p#is_airborne#set false;
+              | _ -> ()
+            end;
           (*  [4] rapport des vitesses et déplacement des objets *)
           let n_v1 = Vector.norm v1 in
           let n_v2 = Vector.norm v2 in

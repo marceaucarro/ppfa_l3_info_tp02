@@ -29,9 +29,11 @@ Création d'une classe enemy représentant les ennemis.
 
 Sprites:
     Nous avons téléchargé des set de sprites en libre service sur les pages suivantes :
-    - Player : https://opengameart.org/content/adventure-series-character-agent-sms.
-    - Enemy :
+    - Player : https://chasersgaming.itch.io/adventure-asset-character-agent-sms.
+    - Enemy : https://chasersgaming.itch.io/brawler-asset-character-soldier-sms.
     - Wall :
+    - Decor : https://chasersgaming.itch.io/brawler-asset-tile-set-military-base-sms.
+
     Nous nous sommes servi d'un éditeur de sprites en ligne appelé Piskel, afin d'en extraire les différentes animations.
     (Les images individuelles sont dispo. dans "ressources/images/<nom_entité>_sprites") 
 
@@ -42,5 +44,8 @@ Sprites:
     Les sprites sont ainsi chargés par la fonction load_ressources de game.ml, qui a son tour appelle les fonctions load_textures des entités.
     Enfin, on se sert la fonction update du systême Draw qui appelle à son tour les fonctions update de chaque type d'entité.
     Chacune d'entre elles va analyser la situation de l'entité pour savoir quelle animation afficher.
+
+    Pour le décor, se fut un peu différent car il est unique et contient toutes les différentes parties de l'arrière-plan dans son composant texture.
+    Dans Draw.update, on s'en sert comme un tampon, que l'on applique plusieurs fois aux bons endroits juste après avoir repeint la toile en blanc.
 
 But actuel : Coder les checkpoints + coder comportement ennemis (mettre en place un x/y limite pour qu'ils n'aillent pas plus loin, un mode calme/alerte...)

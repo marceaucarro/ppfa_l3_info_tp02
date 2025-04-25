@@ -87,7 +87,7 @@ class resolver () =
     method resolve = r
   end
 
-class is_airborne () = (*Vérifie si l'entité est dans les airs.*)
+class is_airborne () = (*Checks whether an entity is airborne.*)
   let r = Component.init false in
   object
     method is_airborne = r
@@ -113,12 +113,10 @@ class type drawable =
   object
     inherit Entity.t
     inherit position
-    inherit velocity (*Useful in finding out which way the sprite should face.*)
     inherit box
     inherit texture
     inherit current_sprite_set
     inherit current_sprite
-    inherit last_dt
     inherit tagged
   end
 
@@ -181,7 +179,6 @@ type tag += Wall
 class enemy =
   object
     inherit Entity.t ()
-    inherit id ()
     inherit position ()
     inherit velocity ()
     inherit box ()
@@ -193,10 +190,23 @@ class enemy =
     inherit mass ()
     inherit elasticity ()
     inherit sum_forces ()
+    inherit is_airborne ()
   end
 
-type tag += Enemy of enemy (**)
+type tag += Enemy of enemy
 
+class decor () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit current_sprite_set () (*Index of the current tile set (the index also indicates the value of the level currently being played).*)
+    inherit current_sprite ()
+  end
+
+type tag += Decor of decor
 
 class block () =
   object

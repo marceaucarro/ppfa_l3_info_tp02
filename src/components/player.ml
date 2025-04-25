@@ -8,7 +8,7 @@ let player (name, x, y, width, height, mass, elasticity) =
   e#position#set Vector.{x = float x; y = float y};
   e#box#set Rect.{width; height};
   e#velocity#set Vector.zero;
-  e#texture#set (Array.init 4 (fun i -> Array.make 1 Texture.black));
+  e#texture#set (Array.init (List.length Cst.player_sprites) (fun i -> Array.make 1 Texture.green));
   e#current_sprite_set#set 0;
   e#current_sprite#set 0;
   e#mass#set mass;
@@ -41,7 +41,7 @@ let move_player player v =
   player#velocity#set v
 
 (**Loads one of the player's sprite sets into component texture at index i.*)
-let load_spriteset player ctx i filename =
+let load_sprite_set player ctx i filename =
   let sprites_filenames = Gfx.load_file ("resources/files/player/" ^ filename) in
   Gfx.main_loop
     (fun _dt -> Gfx.get_resource_opt sprites_filenames)
@@ -66,10 +66,9 @@ let load_spriteset player ctx i filename =
         )
     )
 
-
 (**Sets all player sprite sets (one sprite set for each animation)
 into the player's texture component.*)
 let load_textures ctx =
   let Global.{player1; player2; _ } = Global.get () in
-  List.iteri (fun i filename -> load_spriteset player1 ctx i filename) Cst.player_sprites;
-  List.iteri (fun i filename -> load_spriteset player2 ctx i filename) Cst.player_sprites
+  List.iteri (fun i filename -> load_sprite_set player1 ctx i filename) Cst.player_sprites;
+  List.iteri (fun i filename -> load_sprite_set player2 ctx i filename) Cst.player_sprites

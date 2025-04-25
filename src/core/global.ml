@@ -7,6 +7,7 @@ type t = {
   player2 : player;
   _enemies : enemy list;
   _walls : wall list;
+  decor : decor
 }
 
 let state = ref None
