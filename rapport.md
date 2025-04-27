@@ -83,3 +83,52 @@ Les systèmes représentent des parties importantes du jeu qui s'appliquent à t
 
 * Move : Met a jour la position de l'entité.
     - `update` : Prend la position et la vitesse de l'entité, et s'en sert pour calculer la position à la frame qui suit.
+
+#### Initialisation du jeu
+
+Nous allons prendre le temps de décrire les nouvelles fonctions de `game.ml`. Les autres ne sont pas présentes ici car elles sont identiques au début du projet.
+
+* `game.ml` : Contient le nécéssaire pour démarrer le jeu.
+    - `load_ressources` : Appelle les fonctions load_textures des différentes entités.
+    - `update` : Prépare la prochaine frame du jeu en prenant en compte les input (pour le mouvement, les sauts...), puis met à jour tous les systèmes : les fonctions `update` de Force, Move, Collision et Draw sont appelées.
+    - `run` : Initialise les différentes entités du jeu et les ajoute à `Global`, puis charge les textures via `load_ressources` avant de mettre en place la boucle principale qui appelle `update` 60 fois par seconde.
+
+#### Constantes
+
+Nous allons maintenant décrire l'ensemble des constantes qui ont été ajoutées à `cst.ml`:
+
+* General
+    - `fps` : Indique combien de fois par secondes les "sprites" des personnages doivent changer dans Draw.
+
+* Window
+    - `logical_width` : Largeur de la fenêtre logique.
+    - `logical_height` : Hauteur de la fenêtre logique.
+
+* Level
+    - `decor_tilesets` : Contient une liste où chaque entrée d'indice i contient le nom du fichier où on peut trouver le nom des images du niveau n°i.
+    - `lvl_0_pattern` : Contient une liste de quadruplets, qui indique comment afficher l'arrière-plan du niveau de gauche à droite. Chaque quadruplet est de la forme (i, w, h, flipped), ou i est l'indice de l'image dans le sous-array 0 du composant texture de Decor, w la largeur qu'il prendra, h la hauteur, et flipped s'il doit être inversé verticalement.
+    - `lvl_patterns` : Contient un array des patternes des niveaux du jeu.
+
+* Player
+    - `player_mass` : La masse du joueur.
+    - `player_elasticity` : L'élasticité du joueur.
+    - `player_sprites` : Contient le liste des fichiers à visiter pour obtenir l'ensemble des animations pour le joueur. Chaque élément correspond à une animation comme la marche ou la course.
+    - `player_v_left` : Indique la vitesse de mouvement maximale lorsque le joueur de déplace vers la gauche.
+    - `player_v_right` : Indique la vitesse de mouvement maximale lorsque le joueur de déplace vers la droite.
+    - `player_v_jump` : Indique l'intensité avec laquelle le joueur va sauter.
+
+* Enemy
+    - `enemy_color` : La couleur par défaut de l'ennemi.
+    - `enemy_width` : La largeur du composant `box` de l'ennemi.
+    - `enemy_height` : La hauteur du composant `box` de l'ennemi.
+    - `enemy_x` : La position de l'apparition de l'ennemi sur l'axe x.
+    - `enemy_y` : La position de l'apparition de l'ennemi sur l'axe y.
+    - `enemy_mass` : La masse de l'ennemi.
+    - `enemy_elasticity` : L'élasticité de l'ennemi.
+    - `enemy_sprites` : Contient le liste des fichiers à visiter pour obtenir l'ensemble des animations pour les ennemis. Chaque élément correspond à une animation comme la marche ou la course.
+
+## Sources :
+Voici ci-après les sources des différentes ressources utilisées dans ce projet:
+* Player : https://chasersgaming.itch.io/adventure-asset-character-agent-sms.
+* Enemy : https://chasersgaming.itch.io/brawler-asset-character-soldier-sms.
+* Decor : https://chasersgaming.itch.io/brawler-asset-tile-set-military-base-sms.
