@@ -20,8 +20,25 @@ let tutoriel = [|
 (**************************************Window*********************************)
 let window_width = 800
 let window_height = 600
+let logical_width = 800
+let logical_height = 600
 
-(**************************************Walls**********************************)
+(**************************************Level***********************************)
+let decor_tilesets = ["level_0.txt"]
+
+(*Decor tiles to display from left to right.
+Each tupple has the index to the tile to take from the decor's texture component (in this case, in sub-array 0),
+as well as the width of the tile, the height, and whether if should be flipped vertically.*)
+let lvl_0_pattern =
+  [(0, (210*logical_height/250), (250*logical_height/250), false);
+  (1, (210*logical_height/250), (250*logical_height/250), false);
+  (2, (210*logical_height/250), (250*logical_height/250), false);
+  (3, (115*logical_height/250), (250*logical_height/250), false)]
+
+(*List of all levels' display patterns.*)
+let lvl_patterns = [|lvl_0_pattern|]
+
+(**************************************Walls***********************************)
 let wall_thickness = 32
 
 let hwall_width = window_width
@@ -74,6 +91,8 @@ let enemy_elasticity = 0.2
 
 let enemy_x = window_width*3/4 - wall_thickness   (*Pourrait devenir un tableau éventuellement*)
 let enemy_y = window_height - wall_thickness - player_height
+
+let enemy_sprites = ["enemy_idle.txt"; "enemy_walk.txt"; "enemy_run.txt"; "enemy_jump_still.txt"]
 
 (**************************************Button***********************************)
 let buttons_sprites = [(1, "tuto_button.txt")]

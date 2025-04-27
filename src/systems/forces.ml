@@ -1,7 +1,6 @@
 open Component_defs
 
 type t = physics
-
 let init _ =
   ()
 let dt = 1000.0 /. 60.0

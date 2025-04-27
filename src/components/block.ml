@@ -5,7 +5,7 @@ open System_defs
 
 let create (x, y, v, txt, width, height, mass) =
   let e = new block () in
-  e#position#set Vector.{x=float x;y = float y} ;
+  e#position#set Vector.{ x=float x ; y = float y } ;
   e#velocity#set v ;
   e#mass#set mass ;
   e#box#set Rect.{ width ; height } ;

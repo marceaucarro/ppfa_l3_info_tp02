@@ -38,18 +38,24 @@ let update _dt el =
               let b = Vector.{ x = float s_rect.width +. s_pos.x ; y = 0.0 } in
               let c = Vector.{ x = 0.0 ; y = s_pos.y } in
               let d = Vector.{ x = 0.0 ; y = float s_rect.height +. s_pos.y } in
-              let n = List.fold_left (fun min_v v ->
+              let n = List.fold_left ( fun min_v v ->
                 if ( Vector.norm v <= Vector.norm min_v ) then v else min_v)
                 d [ a; b; c ]
               in
-            
-              if ( (n.x == c.x) && (n.y == c.y)) then (* Collision par le dessous *)
+
+              if ( n = c ) then (*Colision venant d'au dessus.*)
                 begin
                   match e1#tag#get, e2#tag#get with
-                    |Player(p), _ | _, Player(p) -> p#is_airborne#set false ;
+                    | Player(p), _ -> p#is_airborne#set false ;
                     | _ -> ()
-                end;
-          
+                end
+              else if ( n = d ) then  (*Colision venant d'en dessous.*)
+                begin
+                  match e1#tag#get, e2#tag#get with
+                    | _, Player (p) -> p#is_airborne#set false ;
+                    | _ -> ()
+                end ;
+              
               (*  [4] rapport des vitesses et déplacement des objets *)
               let n_v1 = Vector.norm v1 in
               let n_v2 = Vector.norm v2 in

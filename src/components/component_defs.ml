@@ -56,8 +56,7 @@ class elasticity () = (*Stocke l'élasticité de l'entité. Plus elle est élev�
   object
     method elasticity = r
   end
-
-
+  
 class sum_forces () =
   let r = Component.init Vector.zero in
   object
@@ -243,7 +242,6 @@ class button () =
 type tag += Button of button
 
 
-
 class block () =
   object
     inherit Entity.t ()
@@ -275,9 +273,11 @@ class tile () =
     inherit current_sprite_set ()
     inherit current_sprite ()
     inherit last_dt
+    inherit is_airborne ()
   end
 
 type tag += Tile
+
 
 class wall () =
   object
@@ -287,4 +287,18 @@ class wall () =
   end
 
 type tag += Wall
+
+
+class decor () =
+  object
+    inherit Entity.t ()
+    inherit position ()
+    inherit box ()
+    inherit tagged ()
+    inherit texture ()
+    inherit current_sprite_set () (*Index of the current tile set (the index also indicates the value of the level currently being played).*)
+    inherit current_sprite ()
+  end
+
+type tag += Decor of decor
 

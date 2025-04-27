@@ -10,7 +10,7 @@ let player (name, x, y, width, height, mass, elasticity) =
   e#mass#set mass ;
   e#elasticity#set elasticity ;
   e#box#set Rect.{ width ; height } ;
-  e#texture#set (Array.init 4 (fun _ -> Array.make 1 Texture.transparent)) ;
+  e#texture#set (Array.init (List.length Cst.player_sprites) (fun i -> Array.make 1 Texture.green)) ;
   e#current_sprite_set#set 0 ;
   e#current_sprite#set 0 ;
   Collision_system.(register (e :> t)) ;
@@ -41,6 +41,7 @@ let move_player player v =
   player#velocity#set v
 
 (**Loads one of the player's sprite sets into component texture at index i.*)
+
 let load_spriteset player ctx i filename =
   let sprites_filenames = Gfx.load_file ("resources/files/player/" ^ filename) in
   Gfx.main_loop
@@ -59,15 +60,14 @@ let load_spriteset player ctx i filename =
         else
         None
       )
-      (fun sprite_set ->
+      ( fun sprite_set ->
         let player_textures = player#texture#get in
         player_textures.(i) <-
           (sprite_set
           |> List.map (fun img -> Texture.Image img)
           |> Array.of_list) ;
-          player#texture#set player_textures
+          player#texture#set player_textures)
       )
-    )
 
 (**Sets all player sprite sets (one sprite set for each animation)
 into the player's texture component.*)
