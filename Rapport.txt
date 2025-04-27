@@ -45,7 +45,5 @@ Sprites:
     Enfin, on se sert la fonction update du systême Draw qui appelle à son tour les fonctions update de chaque type d'entité.
     Chacune d'entre elles va analyser la situation de l'entité pour savoir quelle animation afficher.
 
-    Pour le décor, se fut un peu différent car il est unique et contient toutes les différentes parties de l'arrière-plan dans son composant texture.
-    Dans Draw.update, on s'en sert comme un tampon, que l'on applique plusieurs fois aux bons endroits juste après avoir repeint la toile en blanc.
 
 But actuel : Coder les checkpoints + coder comportement ennemis (mettre en place un x/y limite pour qu'ils n'aillent pas plus loin, un mode calme/alerte...)

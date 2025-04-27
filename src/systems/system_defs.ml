@@ -1,4 +1,3 @@
-
 open Ecs
 
 module Collision_system = System.Make(Collision)

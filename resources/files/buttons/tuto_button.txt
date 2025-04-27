@@ -1,0 +1,3 @@
+tuto/tuto_base.bmp
+tuto/tuto_mouseover.bmp
+tuto/tuto_mousedown.bmp
