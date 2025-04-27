@@ -1,10 +1,66 @@
+Marceau CARRO et Quentin Wattelle
 
-Colisions:
-    - Un problème qui nous a bloqué quelque temps est que les joueurs passaient à travers le sol malgré le fait que les deux étaient dans colision system.
-        J'ai ensuite réalisé que c'était parce que le joueur avait un vecteur vélocité nul lors du calcul de colision, et comme lui et le mur
-        étaient considérés comme immobiles, on n'essayait pas de résoudre leur colision dans la fct de maj de colision.ml.
+Rapport de Projet de PFA : Jeu de plateforme "At What Cost"
+
+Pour ce projet, il nous était demandé de programmer un jeu en OCaml en se servant des bibliothèques Gfx et ECS, et en implémentant entre autres de la gravité.
+Nous nous sommes alors mis d'accord sur la réalisation d'un jeu de plateforme dans un univers d'agent secret a deux joueurs : At What Cost.
+
+Nous allons à présent expliquer ce que nous avons implanté, en séparant par aspects de l'architecture Entité-Composant-Système.
+Chaque aspect sera détaillé dans sa propre partie.
+
+|> Composants :
+Les composants représentent les différents outils qui vont permettre aux entités d'être correctement représentées auprès des systèmes (dessin, collisions, forces...).
+Voici la liste de ceux-ci:
+- tagged : Agit comme une étiquette, permet de reconnaitre une entité lors d'un pattern-matching.
+- position : Contient le cvecteur de position de l'entité.
+- velocity : Contient le vecteur vitesse de l'entité.
+- mass : Contient la masse de l'entité, qui influe sur les collisions entre les entités.
+- elasticity : Inspiré du TP03, et contient l'élasticité de l'entité : c'est la force avec laquelle il va rebondir lorsqu'il entrera en collision avec d'autres entités.
+- sum_forces : Représente la somme des forces qui s'éxercent sur l'entité.
+- box : Contient les dimensions de l'entité, pour les collisions ou encore le dessin.
+- texture : Contient un tableau de tableau de Textures.
+    Dans le cas des entités comme le joueur ou les ennemis, chaque sous-array contiendra l'ensemble des images 
+    correspondant à une animation de l'entité (marche, course...).
+    Dans le cas du décor, seul le premier sous-array sert, et contient les images du niveau en cours.
+- current_sprite_set : Indique l'indice du sous-array dans lequel se trouve l'image actuellement utilisée par le système de dessin.
+    Par exemple, pour le joueur et les ennemis, il indique quel animation est actuellement affichée (par exemple, le saut).
+- current_sprite : Indique l'indice de l'image actuellement affichée au sein de du sous-array d'indice current_sprite_set du composant texture.
+    En reprenant l'exemple précédent, si nous sommes en train de courir, on sera donc en train d'afficher une des images du sous-array correspondant.
+- last_dt : Inspiré du TP01, et contient le temps écoulé entre le début de l'exécution du programme et la dernière fois que le l'image actuelle affichée pour l'entité 
+    a été changée.
+    Cela nous permet de controler la vitesse à laquelle les animations jouent.
+- is_airborne : Pour les entités capable de sauter, indique si ces derniers sont en l'air. Si c'est le cas, leur action de saut est désactivée jusqu'à ce qu'ils 
+    retouchent le sol.
+
+
+|> Entités :
+Continuons avec les entités, les différents éléments qui vont se retrouver à intéragir avec le joueur via les différents systèmes.
+Ils héritent de nombreux composants pour mieux gérer leurs interactions avec les systèmes auxquels ils sont inscrits et qui seront détaillés dans la section systèmes. 
+Nous allons surtout nous concentrer sur les fonctions du fichier entité correspondant.
+
+Chaque entité possèdent en commun : 
+    * Une fonction de création qui va être utilisé par game.ml pour initialiser les entités.
+    * Un ou des "getters", qui vont récupérer ces entités crées via l'objet Global.
+Le reste est soit unique à une entité, ou légèrement différent en fonction de l'entité, nous allons les décrire ci-dessous.
+
+- Player : Le joueur est le personnage principal de notre jeu, ici représenté par un sprite d'agent secret. Il est capable de plusieurs actions basiques, 
+    soit la marche, la course et le saut. Voici ses fonctions "uniques":
+    * stop_players : Arrête les entités Player en mettant leur vecteur vitesse à 0.
+    * move_player : Agit comme un "setter" de vitesse pour les joueurs et permet le déplacement, on s'en sert dans input.ml pour déplacer les joueurs quand on appuie 
+    sur la touche correspondante.
+    * load_spriteset : Charge un sprite set (un ensemble d'image correspondant à une animation) dans le sous-array de texture indiqué.
+    Nous nous sommes inspirés du TP01 en allant d'abord chercher les noms d'images nécéssaires à l'animations dans un fichier, puis en allant chercher les images eles-mêmes 
+    après avoir découpé la chaîne de caractère du fichier en une liste de noms d'images. Enfin, après s'être assuré que toutes les images soient prêtes, on les met 
+    dans un array qui va remplacer le sous-array initialement "vide" (il ne contient qu'une couleur unie).
+    * load_textures : Répète le travail pour toutes les animations du joueur 1 et du joueur 2. Par la suite, la fonction update du système Draw 
+    pourra afficher les sprites correctement.
+
+collisions:
+    - Un problème qui nous a bloqué quelque temps est que les joueurs passaient à travers le sol malgré le fait que les deux étaient dans collision system.
+        J'ai ensuite réalisé que c'était parce que le joueur avait un vecteur vélocité nul lors du calcul de collision, et comme lui et le mur
+        étaient considérés comme immobiles, on n'essayait pas de résoudre leur collision dans la fct de maj de collision.ml.
         MAIS le joueur étant aussi soumis au système de forces, par conséquent son vecteur vélocité devrait être non-nul!
-        Sol: Dans game.ml, la gestion des colisions se faisait avant celle des forces, et les forces comme la gravité n'agissaient donc pas encore sur le joueur!
+        Sol: Dans game.ml, la gestion des collisions se faisait avant celle des forces, et les forces comme la gravité n'agissaient donc pas encore sur le joueur!
 
 Gestion du mouvement:
     -Nous avons ensuite voulu gérer les sauts, notamment les sauts vers la gauche ou la droite.
@@ -12,10 +68,10 @@ Gestion du mouvement:
         puis on va à droite (mouvement peu naturel).
         Sol: Dans player.ml, on garde en mémoire l'event de la boucle précédente (object LastEvent): si quand on saute on était en train d'aller vers la droite
         (KeyDown "d"), alors on saute vers la droite. Sinon (KeyUp "d", NoEvent ou autre), on ne saute pas vers la droite.
-    -Création classe isAirborne vérifiant si le joueur est dans les airs ou non (présence d'une colision venant d'en bas). Permet de désactiver le saut en l'air.
+    -Création classe isAirborne vérifiant si le joueur est dans les airs ou non (présence d'une collision venant d'en bas). Permet de désactiver le saut en l'air.
     -Mise en place dans input.ml d'une accélération progréssive. (On ne va plus immédiatement à la vitesse max)
 
-    -Création d'un composant elasticité comme conseillé dans le fichier colision: Comme il y avait une élasticité fixe de 0.75, le joueur avait tendance à
+    -Création d'un composant elasticité comme conseillé dans le fichier collision: Comme il y avait une élasticité fixe de 0.75, le joueur avait tendance à
     rebondir comme un ballon lorsqu'il touchait le sol.
 
 

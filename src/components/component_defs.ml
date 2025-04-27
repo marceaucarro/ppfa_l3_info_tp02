@@ -272,7 +272,7 @@ class tile () =
     inherit texture ()
     inherit current_sprite_set ()
     inherit current_sprite ()
-    inherit last_dt
+    inherit last_dt ()
     inherit is_airborne ()
   end
 
