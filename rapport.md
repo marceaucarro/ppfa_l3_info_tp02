@@ -2,7 +2,7 @@ Quentin Wattelle, Marceau CARRO
 # Rapport de Projet de PFA : Jeu de plateforme "At What Cost"
 
 ## Introduction
-Pour ce projet, il nous était demandé de programmer un jeu en OCaml en se servant des bibliothèques Gfx et ECS, et en implémentant des aspects classiques des jeux vidéos tel que la gravité.
+Pour ce projet, il nous était demandé de programmer un jeu en OCaml en se servant des bibliothèques Gfx et ECS, et en implémentant des aspects classiques des jeux vidéos tel que les collisions.
 Nous nous sommes alors mis d'accord sur la réalisation d'un jeu de plateforme dans un univers d'agent secret a deux joueurs : At What Cost.
 
 ## Description des éléments du projet
@@ -70,33 +70,16 @@ Les systèmes représentent des parties importantes du jeu qui s'appliquent à t
     - `update` : La seconde fonction se contente d'appliquer la première trois fois, pour plus d'efficacité dans la séparation des entités.
 
 * Draw : Dessine les entités inscrites à l'écran.
-    - `display_background` : Inspirée des premiers TP, 
+    - `display_background` : Inspirée des premiers TP, cette fonction se sert de l'entité de type Decor pour afficher l'arrière-plan.
+    On commence par vérifier si le composant texture a bien reçu les images (En effet, nous n'avons pas pu coder les fonctions de chargement de ressources de telle façon que la fonction `update` de `game.ml` soit la fonction de continuation de `load_ressources`. Par conséquent, update commence à s'éxécuter avant que textures soit mis à jour. Il est donc nécéssaire de vérifier pour s'assurer de ne pas faire un accès en dehors des bornes). Si c'est le cas, on commence à afficher : on itère sur la constante lvl_pattern (détaillée dans la section Constantes) qui est un array de listes de quadruplets : chaque sous-liste représente un niveau, et chaque quadruplet les infos sur quelle image afficher et comment.
+    On affiche en se servant du décor comme d'un tampon : On affiche la première image au point (0,0), puis se déplace sur l'axe x de façon à se retrouver juste à droite de l'image, et on recommence jusqu'à ce qu'on ait tout affiché comme on l'a indiqué via lvl_pattern.
+    - `update_human` : Affiche les entités humaines (`Player` et `Enemy`) en fonction de la situation dans laquelle elles se trouvent.
+    On verifie d'abord que les images soient bien dans le tableau. Ensuite, on vérifie dans quel sens le vecteur de vitesse se trouve, pour savoir dans quel sens doit regarder le personnage. Ensuite, s'il est dans les airs, on se place dans le sous-array de texture dans lequel se trouve l'animation de saut. Sinon, en fonction de la vitesse, on choisit soit l'animation "IDLE" (on reste debout sans rien faire), la marche ou la course.
+    Ensuite, on affiche et enfin, comme les animations se doivent de paraître vivantes, nous nous sommes inspirés du TP01 et sa variable `last_dt` pour changer l'image de l'animation à intervalles constants. Dans notre cas, la mise à jour se fait sept fois par secondes, donc la boucle de l'animation se fait à 7 fps.
+    - `update` : La fonction update commence par afficher le fond d'écran, puis itère sur le reste des entités pour les afficher. On note que décor est ici ignoré pour ne pas recouvrir le reste de l'image.
 
-## Construction du jeu 
+* Forces : Prend en compte les différentes forces qui s'appliquent sur les entités.
+    - `update` : Fonction inspirée d'un des TP puis corrigée. On itère sur les entités inscrites et on leur applique l'ensemble des forces présentes dans la composante `sum_forces`, additionné au poids du l'entité. On se sert ensuite de la formule $$a =  \frac{\sum F}{m}$$ pour trouver l'acceleration, puis la vitesse, et on ajoute le frottement avant de mettre à jour la composante de vitesse.
 
-Il suffit de faire `dune build` à la racine. La cible construite par défaut est `prog/game_js.bc.js` qui est incluse dans le fichier HTML `index.html`. Pour construire le programme natif SDL, il faut exécuter la commande `dune build @sdl`.
-
-Pour effacer les fichiers générés, utiliser la commande `dune clean`.
-
-##  Dépendences
-Le projet de base requiert `ocaml`, `js_of_ocaml`, `js_of_ocaml-ppx`, `dune`. La production de code natif (testé uniquement sous Linux pour l'instant) requiert `tsdl`, `tsdl-image` et `tsdl-ttf` (ainsi que la bibliothèque SDL native).
-
-
-## Références
-### ECS
-https://en.wikipedia.org/wiki/Entity_component_system
-https://austinmorlan.com/posts/entity_component_system/
-https://tsprojectsblog.wordpress.com/portfolio/entity-component-system/
-https://savas.ca/nomad
-https://github.com/skypjack/entt
-https://ajmmertens.medium.com/building-an-ecs-2-archetypes-and-vectorization-fe21690805f9
-https://github.com/SanderMertens/flecs
-
-### Physique/Collision
-https://medium.com/@brazmogu/physics-for-game-dev-a-platformer-physics-cheatsheet-f34b09064558
-https://www.gamedeveloper.com/design/platformer-controls-how-to-avoid-limpness-and-rigidity-feelings
-https://blog.hamaluik.ca/posts/simple-aabb-collision-using-minkowski-difference/
-https://www.toptal.com/game/video-game-physics-part-i-an-introduction-to-rigid-body-dynamics
-https://www.toptal.com/game/video-game-physics-part-ii-collision-detection-for-solid-objects
-https://www.toptal.com/game/video-game-physics-part-iii-constrained-rigid-body-simulation
-https://gdcvault.com/play/1021921/Designing-with-Physics-Bend-the
+* Move : Met a jour la position de l'entité.
+    - `update` : Prend la position et la vitesse de l'entité, et s'en sert pour calculer la position à la frame qui suit.
