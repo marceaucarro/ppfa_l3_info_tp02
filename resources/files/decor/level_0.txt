@@ -1,4 +1,0 @@
-level_0_0.png
-level_0_1.png
-level_0_2.png
-level_0_mirador.png

@@ -1,60 +1,50 @@
 open Component_defs
 open System_defs
 
-let wall (x, y, txt, width, height, mass, elasticity) =
+let wall (id_level, x, y) =
   let e = new wall () in
+  e#id_level#set id_level ;
   e#tag#set Wall ;
   e#position#set Vector.{ x = float x ; y = float y } ;
   e#velocity#set Vector.zero ;
-  e#mass#set mass ;
-  e#elasticity#set elasticity ;
-  e#box#set Rect.{ width ; height} ;
-  let textures = e#texture#get in (* Dégager cette ligne et les 2 suivantes ensuite *)
-  textures.(0).(0) <- txt ;
-  e#texture#set textures ;
+  e#mass#set infinity ;
+  e#elasticity#set 0.0 ;
+  e#sum_forces#set Vector.zero ;
+  e#box#set Rect.{ width = Cst.tile_width ; height = Cst.tile_height } ;
   Collision_system.(register (e :> t)) ;
-  Draw_system.(register (e :> t)) ;
-  Move_system.(register (e :> t)) ;
-  Force_system.(register (e :> t)) ;
-  e
+  Force_system.(register (e :> t)) ; 
+  e 
 
-let walls () = 
-  List.map wall
-    Cst.[ 
-      (hwall1_x, hwall1_y, Texture.transparent, hwall_width, hwall_height, infinity, 0.0) ;
-      (hwall2_x, hwall2_y, Texture.transparent, hwall_width, hwall_height, infinity, 0.0) ;
-      (vwall1_x, vwall1_y, Texture.transparent, vwall_width, vwall_height, infinity, 0.0) ;
-      (vwall2_x, vwall2_y, Texture.transparent, vwall_width, vwall_height, infinity, 0.0) ;
-    ]
+let walls () =
+  let walls_set = Array.make (Cst.nb_levels) ([] :> wall list) in
+  let wall_tmp = new wall () in
+  wall_tmp#id_level#set (-1) ;
 
-(**Loads one of the wall's sprite sets into component texture at index i.*)
-(*let load_spriteset wall ctx i filename =
-   let sprites_filenames = Gfx.load_file ("resources/files/wall/" ^ filename) in
-  Gfx.main_loop
-    (fun _dt -> Gfx.get_resource_opt sprites_filenames)
-    (fun txt ->
-       let sprite_set =
-         txt
-         |> String.split_on_char '\n'
-         |> List.filter (fun s -> s <> "") (* retire les lignes vides *)
-         |> List.map (fun s -> Gfx.load_image ctx ("resources/images/wall_sprites/" ^ s))
-       in
-       Gfx.main_loop (fun _dt ->
-           if List.for_all Gfx.resource_ready sprite_set then
-             Some (List.map Gfx.get_resource sprite_set)
-           else None
-         )
-         (fun sprite_set ->
-          let player_textures = player#texture#get in
-            player_textures.(i) <- (sprite_set
-                         |> List.map (fun img -> Texture.Image img)
-                         |> Array.of_list);
-          player#texture#set player_textures
-        )
-    ) *)
+  List.iter ( fun (id_level, filename) ->
+    let tmp = List.hd (String.split_on_char '.' filename) in 
+    let walls_resources = Gfx.load_file ("resources/levels/"^tmp^"/"^tmp^"_walls.txt") in
+    Gfx.main_loop
+    ( fun _dt -> Gfx.get_resource_opt walls_resources )
+    ( fun walls_def ->
+      let walls_set_tmp =
+        walls_def
+        |> String.split_on_char '\n'
+        |> List.mapi ( fun y ligne -> 
+           ligne
+           |> String.split_on_char ' '
+           |> List.mapi ( fun x w ->
+                if ( w = "0" ) then
+                  wall_tmp
+                else
+                  wall (id_level, (x * (Cst.tile_width)), (y * (Cst.tile_height)))
+              )
+           )
+        |> List.flatten
+        |> List.filter ( fun w -> w#id_level#get >= 0 )
+      in
 
+      walls_set.(id_level) <- walls_set_tmp ;
+    )
+  ) Cst.def_levels ;
 
-(**Sets all wall textures into their texture component.*)
-(*let load_textures ctx =
-  let Global.{_walls; _ } = Global.get () in
-  List.iteri (fun i filename -> load_spriteset player1 ctx i filename) Cst.player_sprites;*)
+  walls_set

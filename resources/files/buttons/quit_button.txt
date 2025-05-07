@@ -1,0 +1,3 @@
+quit/quit_base.png
+quit/quit_mouseover.png
+quit/quit_mousedown.png

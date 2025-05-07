@@ -21,12 +21,6 @@ class id_level () =
     method id_level = r
   end
 
-class id_plan () =
-  let r = Component.init 0 in
-  object
-    method id_plan = r
-  end
-
 class tagged () =
   let r = Component.init No_tag in
   object
@@ -105,28 +99,22 @@ class is_airborne () = (*Vérifie si l'entité est dans les airs.*)
     method is_airborne = r
   end
 
-class action () =
+class action () = (* Fonction activée suite à une action sur une entité *)
   let r = Component.init (fun () -> ()) in
   object
     method action = r
   end
 
-class hovered_over () =
+class hovered_over () = (* Entité survolé par la souris *)
   let r = Component.init false in
   object
     method hovered_over = r
   end
 
-class clicked () =
+class clicked () = (* Entité cliqué par la souris *)
   let r = Component.init false in
   object
     method clicked = r
-  end
-
-class resolver () =
-  let r = Component.init (fun (_ : Vector.t) (_ : tagged) -> ()) in
-  object
-    method resolve = r
   end
 
 
@@ -139,17 +127,20 @@ class resolver () =
 class type collidable =
   object
     inherit Entity.t
+    inherit id_level
+    inherit tagged
     inherit position
-    inherit box
+    inherit velocity
     inherit mass
     inherit elasticity
-    inherit velocity
-    inherit tagged
+    inherit box
   end
 
 class type drawable =
   object
     inherit Entity.t
+    inherit id_level
+    inherit tagged
     inherit position
     inherit velocity (*Useful in finding out which way the sprite should face.*)
     inherit box
@@ -157,12 +148,13 @@ class type drawable =
     inherit current_sprite_set
     inherit current_sprite
     inherit last_dt
-    inherit tagged
   end
 
 class type movable =
   object
     inherit Entity.t
+    inherit id_level
+    inherit tagged
     inherit position
     inherit velocity
   end
@@ -170,9 +162,10 @@ class type movable =
 class type physics =
   object 
     inherit Entity.t
+    inherit id_level
+    inherit velocity
     inherit mass
     inherit sum_forces
-    inherit velocity
   end
 
 
@@ -182,20 +175,34 @@ class type physics =
 *                                                                           *
 ****************************************************************************)
 
-class player name =
+class screen () =
   object
-    inherit Entity.t ~name ()
+    inherit Entity.t ()
+    inherit id_level ()
+    inherit tagged ()
     inherit position ()
     inherit velocity ()
     inherit box ()
+  end
+
+type tag += Screen
+
+
+class player name =
+  object
+    inherit Entity.t ~name ()
+    inherit id_level ()
     inherit tagged ()
+    inherit position ()
+    inherit velocity ()
+    inherit mass ()
+    inherit elasticity ()
+    inherit sum_forces ()
+    inherit box ()
     inherit texture ()
     inherit current_sprite_set ()
     inherit current_sprite ()
     inherit last_dt ()
-    inherit mass ()
-    inherit elasticity ()
-    inherit sum_forces ()
     inherit is_airborne ()
   end
 
@@ -206,26 +213,30 @@ class enemy () =
   object
     inherit Entity.t ()
     inherit id ()
+    inherit id_level ()
+    inherit tagged ()
     inherit position ()
     inherit velocity ()
+    inherit mass ()
+    inherit elasticity ()
+    inherit sum_forces ()
     inherit box ()
-    inherit tagged ()
     inherit texture ()
     inherit current_sprite_set ()
     inherit current_sprite ()
     inherit last_dt ()
-    inherit mass ()
-    inherit elasticity ()
-    inherit sum_forces ()
+    inherit is_airborne ()
   end
 
-type tag += Enemy of enemy (**)
+type tag += Enemy of enemy
 
 
 class button () =
   object
     inherit Entity.t ()
     inherit id ()
+    inherit id_level ()
+    inherit tagged ()
     inherit position ()
     inherit velocity ()
     inherit box ()
@@ -236,35 +247,16 @@ class button () =
     inherit action ()
     inherit hovered_over ()
     inherit clicked ()
-    inherit tagged ()
   end
 
 type tag += Button of button
-
-
-class block () =
-  object
-    inherit Entity.t ()
-    inherit position ()
-    inherit velocity ()
-    inherit box ()
-    inherit tagged ()
-    inherit texture ()
-    inherit current_sprite_set ()
-    inherit current_sprite ()
-    inherit last_dt ()
-    inherit mass ()
-    inherit elasticity ()
-    inherit sum_forces ()
-  end
 
 
 class tile () =
   object
     inherit Entity.t ()
     inherit id ()
-    inherit id_level ()
-    inherit id_plan ()
+    inherit id_level () 
     inherit tagged ()
     inherit position ()
     inherit velocity ()
@@ -273,7 +265,6 @@ class tile () =
     inherit current_sprite_set ()
     inherit current_sprite ()
     inherit last_dt ()
-    inherit is_airborne ()
   end
 
 type tag += Tile
@@ -281,24 +272,33 @@ type tag += Tile
 
 class wall () =
   object
-    inherit tile ()
+    inherit Entity.t ()
+    inherit id_level ()
+    inherit tagged ()
+    inherit position ()
+    inherit velocity ()
     inherit mass ()
     inherit elasticity ()
+    inherit sum_forces ()
+    inherit box ()
   end
 
 type tag += Wall
 
 
-class decor () =
+class overlay () =
   object
     inherit Entity.t ()
-    inherit position ()
-    inherit box ()
+    inherit id ()
+    inherit id_level ()
     inherit tagged ()
+    inherit position ()
+    inherit velocity ()
+    inherit box ()
     inherit texture ()
-    inherit current_sprite_set () (*Index of the current tile set (the index also indicates the value of the level currently being played).*)
+    inherit current_sprite_set ()
     inherit current_sprite ()
+    inherit last_dt ()
   end
 
-type tag += Decor of decor
-
+type tag += Overlay

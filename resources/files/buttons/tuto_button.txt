@@ -1,3 +1,3 @@
-tuto/tuto_base.bmp
-tuto/tuto_mouseover.bmp
-tuto/tuto_mousedown.bmp
+tuto/tuto_base.png
+tuto/tuto_mouseover.png
+tuto/tuto_mousedown.png

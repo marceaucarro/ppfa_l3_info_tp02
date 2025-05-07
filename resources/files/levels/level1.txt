@@ -1,4 +1,0 @@
-levels/level1/level1_0.txt
-levels/level1/level1_1.txt
-levels/level1/level1_2.txt
-levels/level1/level1_3.txt

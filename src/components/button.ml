@@ -1,9 +1,11 @@
 open Component_defs
 open System_defs
 
-let button (id, x, y, width, height, func) =
+
+let button (id, id_level, x, y, width, height, func) =
   let e = new button () in
   e#id#set id ;
+  e#id_level#set id_level ;
   e#tag#set ( Button (e) ) ;
   e#position#set Vector.{ x = float x ; y = float y } ;
   e#velocity#set Vector.zero ;
@@ -18,9 +20,18 @@ let button (id, x, y, width, height, func) =
   Draw_system.(register (e :> t)) ;
   e
 
-let buttons () = 
-  let tuto = button (1, 300, 250, 200, 100, (fun () -> Gfx.debug "\n\n\nTUTO\n\n\n%!")) in
-  [tuto]
+
+let buttons () =
+  let fun_lvl1 () =
+    let Global.{ current_level ; _player ; _ } = Global.get () in
+    _player#position#set Vector.{ x = 576.0 ; y = 400.0 } ;
+    _player#velocity#set Vector.zero ;
+    _player#id_level#set 1 ;
+    current_level#set 1
+  in
+  let play = button (1, 0, 300, 150, 200, 100, fun_lvl1) in
+  let quit = button (2, 0, 300, 275, 200, 100, (fun () -> exit 0)) in
+  [play;quit]
  
 
 let load_spriteset button ctx filename =
@@ -42,11 +53,11 @@ let load_spriteset button ctx filename =
           None
       )
       ( fun sprite_set ->
-        let player_textures = button#texture#get in
+        let button_textures = button#texture#get in
         List.iteri ( fun i img -> 
-          player_textures.(i) <- Array.make 1 (Texture.Image img)
+          button_textures.(i) <- Array.make 1 (Texture.Image img)
         ) sprite_set ;
-        button#texture#set player_textures
+        button#texture#set button_textures
       )
     )
 

@@ -3,13 +3,14 @@ open Component_defs
 type t = {
   window : Gfx.window ;
   ctx : Gfx.context ;
-  current_level : int ;
-  player1 : player ;
-  _enemies : enemy list ;
-  _walls : wall list ;
+  current_level : < get : int ; set : int -> unit > ;
+  _screen : screen ;
+  _player : player ;
+  _enemies : enemy array ;
   _buttons : button list ;
-  _tiles : tile array array array ;
-  decor : decor
+  _walls : wall list array ;
+  _tiles : tile list array array ;
+  _overlays : overlay array ;
 }
 
 let state = ref None
